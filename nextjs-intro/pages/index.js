@@ -5,9 +5,7 @@ const API_KEY = "a3af7d97effb973e78c5fb1fd7787b13";
 export default function Home() {
   const [movies, setMovies] = useState([]);
   useEffect(() => {
-    fetch(
-      `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ko-KR`
-    )
+    fetch("/api/movies")
       .then((res) => res.json())
       .then((result) => setMovies(result.results))
       .catch((e) => console(e));
