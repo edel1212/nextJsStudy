@@ -1,4 +1,4 @@
-import NavBar from "@/components/NavBar";
+import NavBar from "@/component/NavBar";
 
 /**
  * 중요 포인트
