@@ -335,3 +335,48 @@
         );
       }
       ```
+
+<br/>
+<hr/>
+
+## Header 정보 변경
+
+- NextJs에서는 Header 정보를 쉽게 바꿀 수 있는 Library가 기본적으로 설치되어 있어 편하게 사용이 가능하다.
+- 해당 `Head` 또한 랜더링 될 때 적용되므로 공통적으로 랜더링 되는 위치에 적용하는것이 옳다.
+  - 그렇지 않으면 만약 about 컴포넌트에만 작업했다면 about에서만 적용됨.
+- 예시 코드
+
+  - HeadTitle.js
+
+    ```javascript
+    // 👉 NextJs 설치 시 자동으로 설치되어 있는 라이브러리 Import!
+    import Head from "next/head";
+
+    // 👉 Object형태로 파라미터가 넘어오기 떄문에 {}사용 필수!
+    export default function HeadTitle({ titleName }) {
+      return (
+        // 👉 Head 사용해서 header에서 사용하는 값 변경이 가능하다!
+        <Head>
+          <title>{titleName} | Moive!</title>
+        </Head>
+      );
+    }
+    ```
+
+  - Layout.js
+
+    ```javascript
+    import HeadTitle from "./HeadTitle";
+    import NavBar from "./NavBar";
+
+    export default function Layout({ children }) {
+      return (
+        <>
+          {/* 👉 titleName파라미터명을 맞춰서 넘겨주자 */}
+          <HeadTitle titleName={"Movie!"}></HeadTitle>
+          <NavBar></NavBar>
+          <div>{children}</div>
+        </>
+      );
+    }
+    ```
