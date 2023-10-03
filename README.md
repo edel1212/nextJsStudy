@@ -441,3 +441,43 @@
 
     module.exports = nextConfig;
     ```
+
+### Rewrites 사용 방법
+
+- 받아온 요청을 내가 지정한 요청으로 변경해서 요청을 보낸다.
+- NexJs자체가 서버 역할을 하기 떄문에 가능한 기능이다.
+- 개발자 도구의 Request부분에서도 이제 요청 시 들어있던 비밀키와 같은 정보도 숨길 수 있다.
+- SpringBoot의 `application.protperties`와 비슷한 개념이라 생각하자
+- 예시 코드
+
+  - .env
+
+    ```properties
+        # API KEY
+        API_KEY=시크릿키~
+    ```
+
+  - next.config.js
+
+    ```javascript
+    // ✅ .evn파일에 작성한 API Key를 불러옴
+    const API_KEY = process.env.API_KEY;
+
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+      reactStrictMode: true,
+      /**
+       * 👉 redirects()와는 다르게 "source"로 접근한 값을 "destination"로 변경해서 요청 함
+       */
+      async rewrites() {
+        return [
+          {
+            source: "/api/movies",
+            destination: `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`,
+          },
+        ];
+      },
+    };
+
+    module.exports = nextConfig;
+    ```
