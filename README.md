@@ -365,18 +365,40 @@
 
   - Layout.js
 
-    ```javascript
-    import HeadTitle from "./HeadTitle";
-    import NavBar from "./NavBar";
+        ```javascript
+        import HeadTitle from "./HeadTitle";
+        import NavBar from "./NavBar";
 
-    export default function Layout({ children }) {
-      return (
-        <>
-          {/* 👉 titleName파라미터명을 맞춰서 넘겨주자 */}
-          <HeadTitle titleName={"Movie!"}></HeadTitle>
-          <NavBar></NavBar>
-          <div>{children}</div>
-        </>
-      );
-    }
-    ```
+        export default function Layout({ children }) {
+          return (
+            <>
+              {/* 👉 titleName파라미터명을 맞춰서 넘겨주자 */}
+              <HeadTitle titleName={"Movie!"}></HeadTitle>
+              <NavBar></NavBar>
+              <div>{children}</div>
+            </>
+          );
+        }
+        ```
+
+    <br/>
+    <hr/>
+
+## 정적 파일 불러오는 방법
+
+- NextJs에서 정적 파일은 public폴더 안에 존재한다.
+- 불러오는 방법은 간단하게 "/파일"로 다른 경로작업 필요없이 불러올 수 있다. - 틀이 그렇게 잡혀있기 때문
+- 예시 코드
+
+  - index.js
+
+  ```javascript
+  export default function NavBar() {
+    return (
+      <nav>
+        {/** 바로 public 내부의 vercel.svg를 불러옴 */}
+        <img src="/vercel.svg"></img>
+      </nav>
+    );
+  }
+  ```
