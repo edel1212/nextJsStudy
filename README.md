@@ -58,3 +58,72 @@
   ```
 - `export`는 필수이며 무조건 `export default`를 사용해서 모듈화 해줘야한다.
   - Next.js 프레임워크 자체에서 그렇게 정의하였으므로 따라 사용하면 된다.
+
+<br/>
+
+### `Link Tag`
+
+- React에서는 `A Tag`를 사용하지 말자, 아니 사용하면 안된다.
+  - 화면이 깜빡거림
+  - 느림
+  - 장점이 하나도 없으며 eslint에서도 사용하지 말라고 경고가 나옴
+- `Link Tag` 장점
+  - 화면이 깜빡이지 않고 페이지간 이동이 가능하며 속도 또한 훨씬 빨라 SPA느낌을 준다.
+  - 따로 해당 Library를 설치할 필요 없이 NextJs에 포함되어 있어서 그냥 바로 `import` 하여 사용하면 된다.
+  - `className`, `style`등등 여러가지를 사용이 가능하다.
+- 예시 코드
+
+  ```javascript
+  // 👉 그냥 import 하고 사용하면 끝!
+  import Link from "next/link";
+
+  export default function NavBar() {
+    /**
+     *  👉 React를 사용하면 a Tag를 사용해서 페이지 이동을 사용하지 말자!!
+     *     - 무조건 Link를 사용해주자! 그래야 싱글 페이지를 경험 하는 느낌을 낼 수 있음!! 기억하자!
+     */
+    return (
+      <nav>
+        <Link href="/" style={{ color: "red" }} className="hello">
+          Home
+        </Link>
+        <Link href="/about">About</Link>
+      </nav>
+    );
+  }
+  ```
+
+<br/>
+
+### `useRouter()`
+
+- 해당 Url에 대한 정보를 가져와서 사용이 가능하다.
+- NextJs 설치 시 자동으로 설치되어 있기에 바로 사용하면 된다.
+- 예시 코드
+
+  ```javascript
+  import Link from "next/link";
+  import { useRouter } from "next/router";
+
+  const activeNav = (path) => {
+    // 💬 NextJs에서 기본적으로 router가 설치되어 있기 때문에 사용만 하면된다.
+    //    - 해당 함수 내에는 rotuer에 대한 여러가지 정보를 받아서 사용이 가능함
+    const router = useRouter;
+    return {
+      color: path === router().pathname ? "red" : null,
+    };
+  };
+
+  export default function NavBar() {
+    return (
+      <nav>
+        <Link href="/" style={activeNav("/")}>
+          Home
+        </Link>
+        <Link href="/about" style={activeNav("/about")}>
+          About
+        </Link>
+      </nav>
+    );
+  }
+  ```
