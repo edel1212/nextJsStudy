@@ -1,4 +1,4 @@
-import NavBar from "@/component/NavBar";
+import Layout from "@/component/Layout";
 import "../styles/globals.css";
 
 /***
@@ -10,12 +10,9 @@ import "../styles/globals.css";
 export default function App({ Component, pagePrpos }) {
   return (
     <>
-      <NavBar></NavBar>
-
-      {/* ⭐️ 아래의 형식을 꼭 사용해야한다 스프레드 시트를 사용해서 pageProps를 넘겨주자 */}
-      <Component {...pagePrpos}></Component>
-
-      <span>이런식으로 여러가지를 추가 가능함 ! Footer넣자!</span>
+      <Layout>
+        <Component {...pagePrpos}></Component>
+      </Layout>
     </>
   );
 }

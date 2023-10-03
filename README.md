@@ -293,3 +293,45 @@
       );
     }
     ```
+
+- `_app.js`를 사용할 경우 사용하는 패턴
+
+  - 패턴 사용 이유
+    - `_app.js`에는 공통적으로 사용해야하는 것들이 많이 Import 된다.
+    - 그렇다면 엄청나게 길어질 것이며 이러한 코드는 보기도 관리하기도 힘들어진다.
+  - 예시 코드
+
+    - components -> Layout.js
+
+      ```javascript
+      import NavBar from "./NavBar";
+
+      // 👉 하위로 들어온 모든 요소들은 children으로 받음
+      export default function Layout({ children }) {
+        return (
+          <>
+            <NavBar></NavBar>
+            // 👉 사용
+            <div>{children}</div>
+          </>
+        );
+      }
+      ```
+
+    - \_app.js
+
+      ```javascript
+      import Layout from "@/component/Layout";
+      import "../styles/globals.css";
+
+      export default function App({ Component, pagePrpos }) {
+        return (
+          <>
+            {/* ✅ Layout 하위에 들어온 컴포넌트 구조가 중요함 */}
+            <Layout>
+              <Component {...pagePrpos}></Component>
+            </Layout>
+          </>
+        );
+      }
+      ```
