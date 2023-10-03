@@ -6,7 +6,7 @@ export default function HeadTitle({ titleName }) {
   return (
     // 👉 Head 사용해서 header에서 사용하는 값 변경이 가능하다!
     <Head>
-      <title>{titleName} | Moive!</title>
+      <title>{`${titleName} | Movie!`}</title>
     </Head>
   );
 }

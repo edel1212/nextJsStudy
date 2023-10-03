@@ -19,7 +19,7 @@ const nextConfig = {
     ];
   },
   /**
-   * redirects()와는 다르게 "source"로 접근한 값을 "destination"로 변경해서 요청 함
+   * 👉 redirects()와는 다르게 "source"로 접근한 값을 "destination"로 변경해서 요청 함
    */
   async rewrites() {
     return [
