@@ -13,11 +13,13 @@ export default function Home() {
       .catch((e) => console(e));
   }, []);
   return (
-    <>
-      <h2>Home!</h2>
+    <div className="container">
       {!movies && <h4>Loading...</h4>}
       {movies.map((item) => (
-        <div key={item.id}>{item.original_title}</div>
+        <div className="movie" key={item.id}>
+          <img src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`} />
+          <h4>{item.original_title}</h4>
+        </div>
       ))}
 
       <style jsx>{`
@@ -41,6 +43,6 @@ export default function Home() {
           text-align: center;
         }
       `}</style>
-    </>
+    </div>
   );
 }
