@@ -127,3 +127,109 @@
     );
   }
   ```
+
+<br/>
+<hr/>
+
+## Style 적용 방법
+
+- 방법 1 . `Css Module`을 사용하는 방법
+
+  - 파일의 명명규칙이 정해져 있다.
+
+    - `??.module.css` 형태이다 앞에는 자유지만 뒤에는 꼭 명명규칙에 맞춰주자
+    - 사용 방법은 간단하다 `className`을 직접 지정해주는것이 아닌 `clasName={import 모듈명.클래스명}`로 적용하면 된다.
+      - 여기서 장점은 해당 class명이 알아서 부여되어 중복의 걱정할 필요가 없다.
+
+  - 사용 예시
+
+    - NavBar.module.css
+
+      ```css
+      /*
+      💬 해당 MoudleCss의 최고의 장점은 사용하는 className의 중복을 걱정하지 않아도 된다는 것이다.
+          - 랜더링하여 화면에 사용될 경우 알아서 겹치지 않도록 자동으로 클래스명을 만들어서 사용됨!
+          - 단 사용 방법은 "clasName={모듈명.클래스명}"으로 사용해줘야 한다는 것이다.
+      */
+      .nav {
+        background-color: green;
+        display: flex;
+        justify-items: center;
+      }
+
+      .active {
+        color: red;
+      }
+
+      .link {
+        text-decoration: none;
+      }
+      ```
+
+    - NavBar.js
+
+      ```javascript
+      import Link from "next/link";
+      // 👉 사용 하려는 css modul import
+      import styles from "./NavBar.module.css";
+
+      export default function NavBar() {
+        return (
+          <nav>
+            {/** 👉 다수의 className을 사용해주기 위해서는 배열 형태로 만들어 준 후 join(" ")을 사용해 주자 */}
+            <Link href="??" className={[styles.active, styles.link].join(" ")}>
+              cssMoulde 테스트
+            </Link>
+          </nav>
+        );
+      }
+      ```
+
+- 방법 2 . `style jsx` 적용 방법
+
+  - 따로 Css파일을 만들 필요가 없다
+  - 클래스명을 따로 지어줄 필요없이 태그명으로 바로 사용이 가능하다.
+  - 하지만 뭔가 불편하다 코드가 길어지고 직관적인 느낌이 없음
+  - 백틱 ``을 사용하여 작성해줘야한다.
+  - 사용 방법
+
+    - NavBar.js
+
+      ```javascript
+      import Link from "next/link";
+      import { useRouter } from "next/router";
+
+      const activeNav = (path) => {
+        return useRouter().pathname === path ? "active" : null;
+      };
+
+      export default function NavBar() {
+        return (
+          <nav>
+            {/** 
+               ⭐️ nexjs버전이 오르면서 Link 태그 내부 a태그 사용이 불가능한데 legacyBehavior를 사용하면 된다. 
+                 - "style jsx"에서는 Link태그에 접근이 불가능하여 css적용이 어려움 ... 불편하다..
+            */}
+            <Link href="/" legacyBehavior>
+              <a className={activeNav("/")}>Home</a>
+            </Link>
+            <Link href="/about" legacyBehavior>
+              <a className={activeNav("/about")}>About</a>
+            </Link>
+
+            {/** 👉 아래와 같이 return 구문안에 작성 중요 포인트는 "jsx"를 사용해주고 ``을 사용해줘야한다는 것 */}
+            <style jsx>{`
+              nav {
+                background-color: tomato;
+              }
+              a {
+                text-decoration: none;
+              }
+              .active {
+                color: yellow;
+              }
+            `}</style>
+          </nav>
+        );
+      }
+      ```
