@@ -8,14 +8,11 @@ const activeNav = (path) => {
 export default function NavBar() {
   return (
     <nav>
-      <Link href="/" className={useRouter().pathname === "/" ? "active" : null}>
-        Home
+      <Link href="/" legacyBehavior>
+        <a className={activeNav("/")}>Home</a>
       </Link>
-      <Link
-        href="/about"
-        className={useRouter().pathname === "/about" ? "active" : null}
-      >
-        About
+      <Link href="/about" legacyBehavior>
+        <a className={activeNav("/about")}>About</a>
       </Link>
 
       <style jsx>{`
