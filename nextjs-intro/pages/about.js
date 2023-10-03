@@ -1,5 +1,3 @@
-import NavBar from "@/component/NavBar";
-
 /**
  * 중요 포인트
  * - 함수명은 어떤것이든 상관 없다 routing의 기준은 해당 js파일명을 따라 생성된다.
@@ -9,7 +7,6 @@ import NavBar from "@/component/NavBar";
 export default function about() {
   return (
     <div>
-      <NavBar></NavBar>
       <h2>about</h2>
     </div>
   );

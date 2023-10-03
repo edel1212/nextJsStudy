@@ -128,8 +128,8 @@
   }
   ```
 
-<br/>
-<hr/>
+  <br/>
+  <hr/>
 
 ## Style 적용 방법
 
@@ -147,6 +147,7 @@
 
       ```css
       /*
+      
       💬 해당 MoudleCss의 최고의 장점은 사용하는 className의 중복을 걱정하지 않아도 된다는 것이다.
           - 랜더링하여 화면에 사용될 경우 알아서 겹치지 않도록 자동으로 클래스명을 만들어서 사용됨!
           - 단 사용 방법은 "clasName={모듈명.클래스명}"으로 사용해줘야 한다는 것이다.
@@ -191,6 +192,7 @@
   - 클래스명을 따로 지어줄 필요없이 태그명으로 바로 사용이 가능하다.
   - 하지만 뭔가 불편하다 코드가 길어지고 직관적인 느낌이 없음
   - 백틱 ``을 사용하여 작성해줘야한다.
+  - 작성된 스타일은 모두 독립적으로 적용된다! 다른 컴포넌트에 영향이 없음 해당 컴포넌트의 태그만 영향이 있다
   - 사용 방법
 
     - NavBar.js
@@ -233,3 +235,61 @@
         );
       }
       ```
+
+<br/>
+<hr/>
+
+## 공통영역 처리 방법 - 전역 처리
+
+- spring의 jsp 따지면 `include` Tymeleaf로 따지면 `fagment`로 생각하면 좋다.
+- 공통적인 틀을 만드는 것은 물론이고 Global css 또한 해당 위치에 적용해야한다 그렇지 않으면 에러가 발생한다.
+  - ⭐️ 일반 컴포넌트에 CSS 적용 시 발생 하는 에러
+    - Message : Global CSS cannot be imported from files other than your Custom <App>.
+- 주의 사항
+
+  - 1 . ⭐️ 파일명은 **무조건** `_app.js`이어야한다 . 프레임워크에서 컴포넌트중에서 가장 먼저 읽는 네이밍이기 때문이다!
+  - 2 . 해당 컴포는트의 기본틀을 꼭 지켜주자
+
+    - `{ Component, pagePrpos }` 파라미터로 받는 것
+    - `<Component {...pagePrpos}></Component>`형태로 컴포넌트를 불러오는 것
+
+    ```javascript
+    /***
+     * 👉 { Component, pagePrpos } 해당 파라미터 2개는 필수이다.
+     * - 기본적인 틀이며 따르면 된다,.
+     *  - Component 경우 우리가 생성하는 각각의 컴포넌트라 생각하고
+     *  - pagePrpos 각각의 컴포넌트에 전달하는 pageProps이다
+     */
+    export default function App({ Component, pagePrpos }) {
+      return (
+        <>
+          {/* ✅ 아래의 형식을 꼭 사용해야한다 스프레드 시트를 사용해서 pageProps를 넘겨주자 */}
+          <Component {...pagePrpos}></Component>
+        </>
+      );
+    }
+    ```
+
+- 활용 ( 전역 Css와 Nav Component 사용 )
+
+  - \_app.js
+
+    ```javascript
+    // 👉 NavBar Import
+    import NavBar from "@/component/NavBar";
+    // 👉 전역 css를 불러와도 에러가 없다 👍
+    import "../styles/globals.css";
+
+    export default function App({ Component, pagePrpos }) {
+      return (
+        <>
+          {/** 👉 Nav 컴포넌트 Call */}
+          <NavBar></NavBar>
+
+          <Component {...pagePrpos}></Component>
+
+          <span>이런식으로 여러가지를 추가 가능함 ! Footer넣자!</span>
+        </>
+      );
+    }
+    ```
