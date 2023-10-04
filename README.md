@@ -481,3 +481,48 @@
 
     module.exports = nextConfig;
     ```
+
+<br/>
+<hr/>
+
+## 일정 부분 서버사이드 랜더링을 적용하는 방법 - 구버전용 .. 이제 쓸수 없음
+
+- 특정 페이지 혹은 상황에 따라 데이터 목록을 로딩 후 보여지는 것이 아닌 서버에서 목록을 받아온 후 적용하게 할 수 있다.
+  - 상황에 따라 `SEO`에 필요한 데이터를 홈 화면에 만들 경우 유용할 것으로 추측함
+  - 로딩 화면이 없이 서버에서 데이터를 받고 그 후 다 받아진 이후 화면을 랜더링함.
+- ⭐️ 사용 시 중요
+  - `export`를 꼭 해줘야한다. --> `export async function `
+  - 함수명이 틀리면 안된다. --> `getServerSideProps`
+- 사용 예시
+
+  - index.js
+
+    ```javascript
+    // 👉 { results } 룰 사용해서 ServerSideData를 받아옴
+    export default function Home({ results }) {
+      return (
+        <div className="container">
+          {results.map((item) => (
+            <div className="movie" key={item.id}>
+              <img
+                src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
+              />
+              <h4>{item.original_title}</h4>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // 👉 함수명이 중요함 NextJs에서 정해진 함수명임
+    export async function getServerSideProps() {
+      const { results } =
+        await // 💬 서버에서 요청하므로 rewirte를 사용하기 위해서는 앞에 도메인 정보가 필수임
+        (await fetch(`http://localhost:3000/api/movies`)).json();
+      return {
+        props: {
+          results,
+        },
+      };
+    }
+    ```
