@@ -485,7 +485,7 @@
 <br/>
 <hr/>
 
-## 일정 부분 서버사이드 랜더링을 적용하는 방법 - 구버전용 .. 이제 쓸수 없음
+## pre rendering - 구버전용 .. 이제 쓸수 없음 레거시 코드에는 남아있을 수 있으니 .. 참고하자
 
 - 특정 페이지 혹은 상황에 따라 데이터 목록을 로딩 후 보여지는 것이 아닌 서버에서 목록을 받아온 후 적용하게 할 수 있다.
   - 상황에 따라 `SEO`에 필요한 데이터를 홈 화면에 만들 경우 유용할 것으로 추측함
@@ -524,5 +524,50 @@
           results,
         },
       };
+    }
+    ```
+
+<br/>
+<hr/>
+
+## pre rendering - 변경
+
+- fetch 옵션 중 `{ cache: 'no-store' }`를 사용해주자
+
+  - 예시 코드
+
+    ```javascript
+    import { useEffect, useState } from "react";
+
+    async function fetchData() {
+      const res = await fetch("http://localhost:3000/api/movies", {
+        // 👉 해당 옵션을 사용해주자
+        cache: "no-store",
+      });
+      const data = await res.json();
+      return data.results;
+    }
+
+    export default function Home() {
+      const [results, setResults] = useState([]);
+
+      useEffect(() => {
+        fetchData().then((data) => {
+          setResults(data);
+        });
+      }, []);
+
+      return (
+        <div className="container">
+          {results.map((item) => (
+            <div className="movie" key={item.id}>
+              <img
+                src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
+              />
+              <h4>{item.original_title}</h4>
+            </div>
+          ))}
+        </div>
+      );
     }
     ```
