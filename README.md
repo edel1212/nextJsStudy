@@ -482,6 +482,32 @@
     module.exports = nextConfig;
     ```
 
+### Rewrites - pathVariable 전달 방법
+
+- 예시 코드
+
+  - next.config.js
+
+        ```javascript
+        const API_KEY = process.env.API_KEY;
+
+        /** @type {import('next').NextConfig} */
+        const nextConfig = {
+          reactStrictMode: true,
+          async rewrites() {
+            return [
+             {
+                // 👉 중요 포인트는 ":id"로 값을 넘긴다는 것이다!! 변환해주는 destination도 똑같이!
+                source: "/api/movies/:id",
+                destination: `https://api.themoviedb.org/3/movie/:id?api_key=${API_KEY}`,
+            },
+            ];
+          },
+        };
+
+        module.exports = nextConfig;
+        ```
+
 <br/>
 <hr/>
 
@@ -611,3 +637,59 @@
         return <div>이렇게 받을수 있지요~</div>;
       }
       ```
+
+<br/>
+<hr/>
+
+## `Link Tag`활용 및 `useRouter()`를 사용해서 같은 기능 구현
+
+- 이벤트 함수를 생성하고 거기에 `useRouter()`를 사용해서 push해주면 된다.
+  - ⭐️ 중요 포인트는 `useRouter()` 선언 위치가 `useEffect()` 밑에 있으면 에러가 뜬다 .
+    - 사용에는 문제가 없지만 콘솔에 에러가 뜸
+- `router.push()` 형태로 값을 넣어주면 된다.
+- `{}` Object 구조를 사용하면 다양한 방법으로 사용이 가능하다.
+  - 그냥 `router.push(url)` 사용 시 일반 이동
+  - Object 구조일 경우 `quertParameter` 사용 가능
+  - `router.push({}, "~~~" )`처럼 사용 시 Url 마스킹 가능
+- 사용 예시
+
+  - index.js
+
+    ```javascript
+    import { useRouter } from "next/router";
+
+    export default function Home() {
+      const [movies, setMovies] = useState([]);
+      // ⭐️ 순서가 중요함 useEffect보다 아래있으면 에러 발생함
+      const router = useRouter();
+      // 👉 Link Tag를 사용하지 않고 해당 방법으로도 같은 기능 사용이 가능하다.
+      const onClick = (id) => {
+        /**
+         * ✅ JSON 구조를 사용하면  url 말고도 queryParameter를 넘겨줄 수 있다
+         * - pathname : 이동하려는 path 정보
+         * - query {}  : queryParameter
+         * - push({}, "이동 시 시 사용될 path정보")  >>> ⭐️ 두번째 매개변수를 통해 queryParameter를 숨길 수 있다!!
+         *     - 이런 방식의 활용은 내부 로직을 모르는 사람이 볼때는 쿼리파람없이 해킹 가능 이네 하지만 사실은 쿼리파라미터가 없어서 튕겨낼 수 도 있다.
+         * - 💬 Link 태그에서도 똑같이 사용이 가능하다 그냥 똑같이 넣으면 된다!!
+         */
+        router.push(
+          { pathname: `/movies/${id}`, query: { title: "yooo" } },
+          `/movies/${id}`
+        );
+      };
+
+      return (
+        <div className="container">
+          {movies.map((item) => (
+            <div className="movie" key={item.id}>
+              <img
+                // 👉 함수 호출
+                onClick={() => onClick(item.id)}
+                src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
+              />
+            </div>
+          ))}
+        </div>
+      );
+    }
+    ```

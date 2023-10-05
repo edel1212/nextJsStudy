@@ -38,7 +38,7 @@ export default function Home() {
             onClick={() => onClick(item.id)}
             src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
           />
-          <Link href={`/movies/${item.id}`}>
+          <Link href={`/api/movies/${item.id}`}>
             <h4>{item.original_title}</h4>
           </Link>
         </div>
