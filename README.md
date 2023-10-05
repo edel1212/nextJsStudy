@@ -530,7 +530,7 @@
 <br/>
 <hr/>
 
-## pre rendering - 변경
+## pre rendering - NextJs13 버전 이상용
 
 - fetch 옵션 중 `{ cache: 'no-store' }`를 사용해주자
 
@@ -571,3 +571,43 @@
       );
     }
     ```
+
+<br/>
+<hr/>
+
+## Dynamic Routes
+
+- 이전까지는 Path 정보가 하나 뿐인 컴포넌트를 불러오는 개념이었다면 이제는 변수값 혹은 좀 더 세분화된 url로 컴포넌트를 나눠서 사용가능하다.
+
+### path를 좀 더 세분화
+
+- 간단하게 그냥 폴더를 두면 그게 하나의 path가 된다.
+- 중요한건 해당 폴더 또한 컴포넌트를 갖게 하고싶다면 `index.js`라는 이름으로 컴포넌트를 생성하면 된다.
+- 구조
+  - page
+    - blackGom
+      - index.js : `localhost:3000/blackGome` 시 해당 컴포넌트가 화면에 도출
+      - all.js : `localhost:3000/blackGome/all`
+
+### path를 변수로 받는 방법
+
+- 간단하다 해당 폴더를 생성 한 후 `[변수명].js`로 만들면 해당 변수를 `useRouter` Hook을 이용해 값을 받을 수 있다.
+- 폴더 구조
+
+  - pages
+    - movive
+      - [id].js
+  - 사용 예시
+
+    - [id].js
+
+      ```javascript
+      import { useRouter } from "next/router";
+
+      export default function Detail() {
+        // ⭐️ Hooke을 이용해서 내가 지정한 id값을 받아올 수 있음
+        const router = useRouter;
+        console.log(router().query.id);
+        return <div>이렇게 받을수 있지요~</div>;
+      }
+      ```
