@@ -5,10 +5,21 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [movies, setMovies] = useState([]);
   // ⭐️ 순서가 중요함 useEffect보다 아래있으면 에러 발생함
-  const router = useRouter;
+  const router = useRouter();
   // 👉 Link Tag를 사용하지 않고 해당 방법으로도 같은 기능 사용이 가능하다.
   const onClick = (id) => {
-    router().push(`/movies/${id}`);
+    /**
+     * ✅ JSON 구조를 사용하면  url 말고도 queryParameter를 넘겨줄 수 있다
+     * - pathname : 이동하려는 path 정보
+     * - query {}  : queryParameter
+     * - push({}, "이동 시 시 사용될 path정보")  >>> ⭐️ 두번째 매개변수를 통해 queryParameter를 숨길 수 있다!!
+     *     - 이런 방식의 활용은 내부 로직을 모르는 사람이 볼때는 쿼리파람없이 해킹 가능 이네 하지만 사실은 쿼리파라미터가 없어서 튕겨낼 수 도 있다.
+     * - 💬 Link 태그에서도 똑같이 사용이 가능하다 그냥 똑같이 넣으면 된다!!
+     */
+    router.push(
+      { pathname: `/movies/${id}`, query: { title: "yooo" } },
+      `/movies/${id}`
+    );
   };
 
   useEffect(() => {

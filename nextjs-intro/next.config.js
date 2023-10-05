@@ -28,6 +28,7 @@ const nextConfig = {
         destination: `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`,
       },
       {
+        // 👉 중요 포인트는 ":id"로 값을 넘긴다는 것이다!! 변환해주는 destination도 똑같이!
         source: "/api/movies/:id",
         destination: `https://api.themoviedb.org/3/movie/:id?api_key=${API_KEY}`,
       },
