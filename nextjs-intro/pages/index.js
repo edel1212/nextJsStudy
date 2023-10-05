@@ -1,20 +1,35 @@
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const [movies, setMovies] = useState([]);
+  // ⭐️ 순서가 중요함 useEffect보다 아래있으면 에러 발생함
+  const router = useRouter;
+  // 👉 Link Tag를 사용하지 않고 해당 방법으로도 같은 기능 사용이 가능하다.
+  const onClick = (id) => {
+    router().push(`/movies/${id}`);
+  };
+
   useEffect(() => {
     fetch("/api/movies")
       .then((res) => res.json())
       .then((result) => setMovies(result.results))
       .catch((e) => console(e));
   }, []);
+
   return (
     <div className="container">
       {!movies && <h4>Loading...</h4>}
       {movies.map((item) => (
         <div className="movie" key={item.id}>
-          <img src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`} />
-          <h4>{item.original_title}</h4>
+          <img
+            onClick={() => onClick(item.id)}
+            src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
+          />
+          <Link href={`/movies/${item.id}`}>
+            <h4>{item.original_title}</h4>
+          </Link>
         </div>
       ))}
 
