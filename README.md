@@ -718,3 +718,18 @@
       return <div>{id}</div>;
     }
     ```
+
+<br/>
+<hr/>
+
+## 404 페이지 설정 방법
+
+- 간단하게 `404.js`파일을 만들고 컴포넌트를 생성하면 끝이다.
+
+  - 예시 코드
+
+    ```javascript
+    export default function Error404() {
+      return <div>404Error</div>;
+    }
+    ```
