@@ -32,6 +32,17 @@
 
 - `npx create-next-app@latest` 명령어를 사용해서 nextJs 프로젝트를 생성해준다.
   - 터미널에서 각각 맞는 옵션을 맞게 선택해 주자.
+    - Would you like to use TypeScript?
+    - Would you like to use ESLint?
+    - Would you like to use Tailwind CSS?
+    - Would you like to use `src/` directory?
+      - 사용 하면 src 디렉토리 생성된다.
+    - Would you like to use App Router? (recommended)
+      - ⭐ 라우팅 방식 설정
+        - 이전에는 `pages` 디렉토리 방법을 사용해서 라우팅을 했다
+        - 최근에는 `App` 라우팅 방식이 생성되었다.
+          - `React`에서 추천하는 방법이다. [13버전부터 추가 되었음]
+    - Would you like to customize the default import alias (@/\*)?
 - `npm run dev`를 사용하면 서버 실행
 
 <br/>
