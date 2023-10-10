@@ -448,10 +448,127 @@
 
 - NextJs에서는 Image 태그를 사용할 수 있다
 - 사용 시 장점
+
   - Lazy loading 가능
   - 사이즈 최적화
   - Layout shift 방지
     - 이미지가 로딩전에 너비, 높이가 없어 레이아웃이 깨지는 것
+
+- 사용 방법
+
+  - `img/index.js` - 일반 `<img>, <Image>` 사용
+
+    ```javascript
+    import Image from "next/image";
+    import React, { useEffect, useState } from "react";
+    // ⭐️ Image 태그에 넣을 이미지 Import
+    import picka from "/public/picka.png";
+
+    export default function page() {
+      return (
+        <div>
+          {/* 👉 일반 img 태그 */}
+          <img src="/picka.png" width={"50%"} alt="이건 그냥 img" />
+
+          <hr />
+
+          {/* 👉 Image 태그 */}
+          <Image
+            // ✅ src 경로는 import 된 경로만 사용이 가능함!!!
+            src={picka}
+            alt="이건 최적화 적용"
+            className="다 가능해"
+            style={{ width: "50%", height: "100%" }}
+          />
+        </div>
+      );
+    }
+    ```
+
+  - `img/index.js` - 비동기 ` <Image>` 사용
+
+    - ⭐️ 중요 포인트는 서버로 요청하는 도메인을 `next.config.js`에 꼭 등록해줘야 한다는 것이다.
+
+    ```javascript
+    import Image from "next/image";
+    import React, { useEffect, useState } from "react";
+    import picka from "/public/picka.png";
+
+    export default function page() {
+      const [imageData, setImageData] = useState(null);
+
+      useEffect(() => {
+        (async () => {
+          try {
+            const response = await fetch("/api/movies");
+            const data = await response.json();
+            setImageData(data.results[0].poster_path); // 데이터 설정
+          } catch (error) {
+            console.error("Error fetching image data:", error);
+          }
+        })();
+      }, []);
+
+      return (
+        <div>
+          {/* 👉 비동기 통신 */}
+          <Image
+            src={`https://image.tmdb.org/t/p/w500/${imageData}`}
+            alt="비동기 통신으로 받음 next.config.js 설정 필요"
+            width={400} // ⭐️ 필수 값
+            height={300} // ⭐️ 필수 값
+          />
+        </div>
+      );
+    }
+    ```
+
+  - `next.config.js`
+
+    ```javascript
+    // ✅ .evn파일에 작성한 API Key를 불러옴
+    const API_KEY = process.env.API_KEY;
+
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+      reactStrictMode: true,
+      /**
+       * 👉 해당 "source"에 잡힌 경로를 "destination"로 이동 시켜줌
+       * - :path* 를 사용하면 뒤에 붙은 모든 path 정보를 그대로 넘겨줌
+       * */
+      async redirects() {
+        return [
+          {
+            source: "/old-blog/:path*",
+            destination: "/new-sexy-blog/:path*",
+            // 💬 일반적으로 페이지 이동이 영구적으로 변경된 경우 permanent: true를 사용하고, 일시적인 변경의 경우 permanent: false를 사용합니다.
+            permanent: false,
+          },
+        ];
+      },
+      /**
+       * 👉 redirects()와는 다르게 "source"로 접근한 값을 "destination"로 변경해서 요청 함
+       */
+      async rewrites() {
+        return [
+          {
+            source: "/api/movies",
+            destination: `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`,
+          },
+          {
+            // 👉 중요 포인트는 ":id"로 값을 넘긴다는 것이다!! 변환해주는 destination도 똑같이!
+            source: "/api/movies/:id",
+            destination: `https://api.themoviedb.org/3/movie/:id?api_key=${API_KEY}`,
+          },
+        ];
+      },
+      images: {
+        domains: ["image.tmdb.org", "*"], // 사용하려는 이미지 호스트 이름 추가
+      },
+    };
+
+    module.exports = nextConfig;
+    ```
 
 <br/>
 <hr/>
@@ -470,22 +587,15 @@
   - next.config.js
 
     ```javascript
-    /** @type {import('next').NextConfig} \*/
+    // ✅ .evn파일에 작성한 API Key를 불러옴
+    const API_KEY = process.env.API_KEY;
+
+    /** @type {import('next').NextConfig} */
     const nextConfig = {
       reactStrictMode: true,
-      /**
-       * 👉 해당 "source"에 잡힌 경로를 "destination"로 이동 시켜줌
-       * - :path* 를 사용하면 뒤에 붙은 모든 path 정보를 그대로 넘겨줌
-       * */
-      async redirects() {
-        return [
-          {
-            source: "/old-blog/:path*",
-            destination: "/new-sexy-blog/:path*",
-            // 💬 일반적으로 페이지 이동이 영구적으로 변경된 경우 permanent: true를 사용하고, 일시적인 변경의 경우 permanent: false를 사용합니다.
-            permanent: false,
-          },
-        ];
+      //⭐️ 사용하려는 이미지의 도메인 주소를 추가해줘야한다.
+      images: {
+        domains: ["image.tmdb.org", "*"],
       },
     };
 
