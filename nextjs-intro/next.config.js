@@ -34,6 +34,9 @@ const nextConfig = {
       },
     ];
   },
+  images: {
+    domains: ["image.tmdb.org", "*"], // 사용하려는 이미지 호스트 이름 추가
+  },
 };
 
 module.exports = nextConfig;

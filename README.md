@@ -444,6 +444,18 @@
 <br/>
 <hr/>
 
+## Image 태그 사용하는 방법
+
+- NextJs에서는 Image 태그를 사용할 수 있다
+- 사용 시 장점
+  - Lazy loading 가능
+  - 사이즈 최적화
+  - Layout shift 방지
+    - 이미지가 로딩전에 너비, 높이가 없어 레이아웃이 깨지는 것
+
+<br/>
+<hr/>
+
 ## `next.config.js`
 
 - nextJs 서버의 설정을 수정할 수 있다.
