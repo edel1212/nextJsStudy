@@ -1,10 +1,40 @@
-/**
- * 👉 동장 순서
- * - http://localhost:3000/create 호출
- * - src ->  app -> 해당 요청에 맞는 폴더명을 찾음
- * - 해당 폴더를 찾으면 `page.js`파일이 있다면 해당 컴포넌트를 랜더링 해줌
- *  -> 해당 js명이 `page.js`가 아니라면 404 페이지를 반환함
- */
+"use client";
+
+// 👉 app router를 사용할 경우 navigation에서 Import 해줘야한다!!
+import { useRouter } from "next/navigation";
+
 export default function page() {
-  return <div>src - app - paht명 - page.js </div>;
+  const router = useRouter();
+
+  const submit = (e) => {
+    e.preventDefault();
+    const title = e.target.title.value;
+    const body = e.target.body.value;
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title, body }),
+    };
+    fetch("http://localhost:9999/topics", options)
+      .then((res) => res.json())
+      .then((result) => router.push(`/read/${result.id}`));
+  };
+
+  return (
+    <div>
+      <form onSubmit={(e) => submit(e)}>
+        <p>
+          <input type="text" name="title" placeholder="title"></input>
+        </p>
+        <p>
+          <textarea name="body" placeholder="body"></textarea>
+        </p>
+        <p>
+          <input type="submit" value="create"></input>
+        </p>
+      </form>
+    </div>
+  );
 }

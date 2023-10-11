@@ -1,5 +1,13 @@
-export default function page({ params }) {
+export default async function page({ params }) {
+  const res = await fetch(`http://localhost:9999/topics/${params.id}`);
+  const result = await res.json();
+
   // 👉 접근 시 :  http://localhost:3000/read/1/23/4
-  console.log(params); // { id: [ '1', '23', '4' ] }
-  return <div>{params.id}</div>;
+  console.log(result);
+  return (
+    <div>
+      <h2>{result.title}</h2>
+      <p>{result.body}</p>
+    </div>
+  );
 }
