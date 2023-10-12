@@ -14,7 +14,7 @@ export function Control() {
       {id ? (
         <>
           <li>
-            <Link href="/update/1">Update</Link>
+            <Link href={`/update/${id}`}>Update</Link>
           </li>
           <li>
             <button>Delete</button>
