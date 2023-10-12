@@ -19,7 +19,11 @@ export default function page() {
     };
     fetch("http://localhost:9999/topics", options)
       .then((res) => res.json())
-      .then((result) => router.push(`/read/${result.id}`));
+      .then((result) => {
+        // 👉 router를 새로고침 한다.
+        router.refresh();
+        router.push(`/read/${result.id}`);
+      });
   };
 
   return (
