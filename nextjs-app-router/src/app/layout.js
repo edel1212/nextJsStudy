@@ -9,7 +9,7 @@ export const metadata = {
 
 // ⭐️ async 선언은 필수 이다. fetch에서 await를 사용하기 위함
 export default async function RootLayout({ children }) {
-  const res = await fetch("http://localhost:9999/topics", {
+  const res = await fetch(process.env.API_URL, {
     cache: "no-cache",
   });
   const topics = await res.json();
