@@ -1151,6 +1151,40 @@
 <br/>
 <hr/>
 
+## 환경변수 사용 방법
+
+- 개발 시 `local`환경과 `prod`환경의 사용 URL이 다를 수 있다.
+- 해당 경우 일일이 변경해주는 것이 아닌 하나의 파일을 읽게끔 하면 된다 `.env`파일
+- 사용 가능한 `.env`파일 종류
+  - `.env` : 어떤 환경이든 읽음 공통 적으로 사용
+  - `.env.local` : 개발 환경에서 읽음 `npm run dev`로 서버 실행 시 읽음
+  - `.env.production` : 운영 환경에서 읽음 `npm build`를 통해 빌드된 서버 실행 시 읽음
+- ⭐️ 만약 통신간 비밀키 와 같은 민감 정보를 사용할 경우라면 `.env`파일에 등록 후 `next.config.js`에서 읽게 끔 해주자 [ Rewrites 사용 방법 확인 ]
+- 기본적인 `app router` 방식은 Server Component 방식이기 때문에 쉽게 사용 가능하지만 `use-client` 방식일 경우 사용 방식이 다르다.
+- 사용 방법
+
+  - .env.local
+
+    ```properties
+    # 👉 Server Component에서 사용 시
+    #    - process.env.??
+    API_URL=http://localhost:9999/topics
+
+    # 👉 Client Component에서 사용 시 꼭  "NEXT_PUBLIC_???"형식으로 사용 해야함
+    #    - process.env.NEXT_PUBLIC_???
+    NEXT_PUBLIC_API_URL=http://localhost:9999/topics
+
+    ```
+
+  - Component별 사용
+    - Server Component : `const res = await fetch(process.env.API_URL)`
+      - 위와 같이 `process.env.???`를 사용해서 불러옴
+    - Client Component : `const res = await fetch(process.env.NEXT_PUBLIC_API_URL + `/${params.id}`, {cache: "no-cache",});`
+      - 위와 같이 `process.env.NEXT_PUBLIC_A???`를 사용해서 불러옴
+
+<br/>
+<hr/>
+
 ## 개발 시 유용한 JSON 서버 개발 방법
 
 - 서버 연동 전 서버가 개발되어 있지 않다면 간단하게 받아오는 것이 가능하다
