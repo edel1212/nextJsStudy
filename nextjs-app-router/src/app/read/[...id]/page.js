@@ -1,5 +1,5 @@
 export default async function page({ params }) {
-  const res = await fetch(`http://localhost:9999/topics/${params.id}`, {
+  const res = await fetch(process.env.NEXT_PUBLIC_API_URL + `/${params.id}`, {
     cache: "no-cache",
   });
   const result = await res.json();
