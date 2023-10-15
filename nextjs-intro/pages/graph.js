@@ -6,10 +6,10 @@ import styles from "../styles/Grpah.module.css"; // Import CSS file for styling
  * 👉 npm install --save chart.js react-chartjs-2 설치
  */
 const data = {
-  labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+  labels: ["종호", "Blue", "Yellow", "Green", "Purple", "Orange"],
   datasets: [
     {
-      label: "# of Votes",
+      label: "값:",
       data: [50, 19, 3, 5, 2, 3],
       backgroundColor: [
         "rgba(255, 99, 132, 0.2)",
