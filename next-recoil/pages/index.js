@@ -25,6 +25,8 @@ function DisplayCount({ count }) {
 }
 
 export default function Home() {
+  // ⭐️ 해당 컴포넌트도 count를 변경할떄마다 랜더링이된다 굉장히 비효율적
+  // 그냥 해당 props를 갖고 있기만 했다고 랜더링이 일어나버린다 .. 상태관리 라이브러리를 사용하는것!
   const [count, setCount] = useState(0);
 
   return (
