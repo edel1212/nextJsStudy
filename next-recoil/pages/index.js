@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 
-function Counter({ count, setCount }) {
+// 👉 Recouil State Import
+import { countState } from "../store/countState";
+// 👉 Recoil 함수 Import
+import { useRecoilValue, useRecoilState } from "recoil";
+
+function Counter() {
+  // 👉 useRecoilState(상태변수)를 사용해서 불러옴 useState() 와 사용방법이 똑같음
+  const [count, setCount] = useRecoilState(countState);
   return (
     <div>
       <h1>Counter : {count}</h1>
@@ -14,26 +21,23 @@ function Counter({ count, setCount }) {
     </div>
   );
 }
-// 👉 만약 같은 컴포넌트가 아님 내부내부내부 있으면 계속 중간 애들이 중계자 역할을 해줘야함...
-//  - 이것을 props drilling이라 한다
-function DisplayCount({ count }) {
+function DisplayCount() {
+  // 값만 읽어오는 Recoil 함수
+  const count = useRecoilValue(countState);
   return (
     <div>
-      <h1>받아온 값을 보여주기만하는 컴포넌트 : {count}</h1>
+      <h1>받아온 값을 보여주기만하는 컴포넌트 {count} </h1>
     </div>
   );
 }
 
 export default function Home() {
-  // ⭐️ 해당 컴포넌트도 count를 변경할떄마다 랜더링이된다 굉장히 비효율적
-  // 그냥 해당 props를 갖고 있기만 했다고 랜더링이 일어나버린다 .. 상태관리 라이브러리를 사용하는것!
-  const [count, setCount] = useState(0);
-
   return (
     <div>
-      <Counter count={count} setCount={setCount} />
+      <h1>asd</h1>
+      <Counter />
       <hr></hr>
-      <DisplayCount count={count}></DisplayCount>
+      <DisplayCount></DisplayCount>
     </div>
   );
 }
