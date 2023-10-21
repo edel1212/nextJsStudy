@@ -1300,68 +1300,41 @@
 - React에서 쓰던 명령어와 비슷하여 쉽게 사용이 가능하다.
 - 사용 방법
 
-  - `npm install reack-cookie`
+  - `npm install reack-cookie` 설치
   - 예시 코드
 
     ```javascript
-    import React, { useEffect, useState } from "react";
     import { useCookies } from "react-cookie";
 
     export default function cookie() {
-      /*====== Cookie 관련 선언======*/
-      // Cookie 사용 State 선언 -
-      const [cookies, setCookie, removeCookie] = useCookies([]);
-      const [isRemember, setIsRemember] = useState(false); //아이디 저장 체크박스 체크 유무
+      // 👉 Cookie 사용 State 선언 -- 사용될 cookie의 key값을 배열로 기본값 설정 가능
+      const [cookies, setCookie, removeCookie] = useCookies(["rememberId"]);
 
-      /*페이지가 최초 렌더링 될 경우*/
-      useEffect(() => {
-        /*저장된 쿠키값이 있으면, CheckBox TRUE 및 UserID에 값 셋팅*/
-        if (cookies.rememberUserId !== undefined) {
-          setUserid(cookies.rememberUserId);
-          setIsRemember(true);
-        }
-      }, []);
+      // 👉 cookies.?? 를 사용해서 값의 유무 체크가 가능
+      function checkCookie() {
+        return cookies.rememberId === undefined;
+      }
 
-      const handleOnChange = (e) => {
-        setIsRemember(e.target.checked);
-        if (!e.target.checked) {
-          removeCookie("rememberUserId");
-        }
+      // 👉 Cookie의 사용될 값 지정
+      const handleSetCookie = () => {
+        // 쿠키 저장 기간 설정
+        const expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + 7);
+
+        setCookie(
+          "Key값 지정",
+          "Value 값 지정",
+          // 옵션 지정
+          {
+            path: "/", // 사용 범위 지정
+            expires: expirationDate, // 유지기간 설정 - 자유 없어도 된다.
+          }
+        );
       };
 
-      /*============================*/
+      // 👉 Cookie 삭제
+      removeCookie("삭제하고 싶은 Key 값 지정", { path: "/" });
 
-      return (
-        <>
-          <h4>User ID</h4>
-          <input
-            type="email"
-            value={userid}
-            placeholder="name@domain.com "
-            onChange={(e) => {
-              setUserid(e.target.value);
-            }}
-          />
-          <p>
-            아이기 기억 :{" "}
-            <input
-              type="checkbox"
-              onChange={(e) => {
-                handleOnChange(e);
-              }}
-              checked={isRemember}
-            />
-          </p>
-
-          {/*  버튼 누르면 쿠키 저장할거임!! */}
-          <button
-            onClick={(e) =>
-              setCookie("rememberUserId", "edel1212@naver.com", { path: "/" })
-            }
-          >
-            저장 이벤트 발동!
-          </button>
-        </>
-      );
+      return <></>;
     }
     ```
