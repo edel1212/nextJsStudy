@@ -1338,3 +1338,30 @@
       return <></>;
     }
     ```
+
+<br/>
+<hr/>
+
+## 구조
+
+my-nextjs-app/
+├── pages/
+│ ├── index.js
+│ ├── about.js
+│ ├── ...
+├── components/
+│ ├── Header.js
+│ ├── Footer.js
+│ ├── ...
+├── customHook
+│ ├── login
+│ │ ├── Hook....js
+├── styles/
+│ ├── global.css
+│ ├── ...
+├── public/
+│ ├── images/
+│ │ ├── ...
+│ ├── ...
+├── package.json
+├── ...
