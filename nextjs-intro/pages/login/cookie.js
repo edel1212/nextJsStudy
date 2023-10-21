@@ -7,7 +7,7 @@ export default function cookie() {
   /*============================*/
 
   /*====== Cookie 관련 선언======*/
-  const [cookies, setCookie, removeCookie] = useCookies(["rememberUserId"]); //Cookies 이름
+  const [cookies, setCookie, removeCookie] = useCookies([]); //Cookies 이름
   const [isRemember, setIsRemember] = useState(false); //아이디 저장 체크박스 체크 유무
 
   /*페이지가 최초 렌더링 될 경우*/
@@ -52,9 +52,10 @@ export default function cookie() {
 
       {/*  버튼 누르면 쿠키 저장할거임!! */}
       <button
-        onClick={(e) =>
-          setCookie("rememberUserId", "edel1212@naver.com", { path: "/" })
-        }
+        onClick={(e) => {
+          removeCookie("rememberUserId", { path: "/" });
+          //setCookie("rememberUserId", "edel1212@naver.com", { path: "/" });
+        }}
       >
         저장 이벤트 발동!
       </button>
