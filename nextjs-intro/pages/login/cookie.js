@@ -10,54 +10,54 @@ export default function cookie() {
   const [cookies, setCookie, removeCookie] = useCookies(["rememberId"]); //Cookies 이름
   const [isRemember, setIsRemember] = useState(false); //아이디 저장 체크박스 체크 유무
 
-  /*페이지가 최초 렌더링 될 경우*/
+  // Cookie 체크
   useEffect(() => {
     /*저장된 쿠키값이 있으면, CheckBox TRUE 및 UserID에 값 셋팅*/
-    if (cookies.rememberId !== undefined) {
-      setUserid(cookies.rememberUserId);
-      setIsRemember(true);
-    }
+    if (cookies.rememberId === undefined) return;
+    setUserid(cookies.rememberId);
+    setIsRemember(true);
   }, []);
 
-  const handleOnChange = (e) => {
-    setIsRemember(e.target.checked);
-    if (!e.target.checked) {
-      removeCookie("rememberUserId", { path: "/" });
-    }
+  // RememberId - Check
+  const rememberIdChange = (event) => {
+    const rememberFlag = event.target.checked;
+    setIsRemember(rememberFlag);
+    if (!rememberFlag) removeCookie("rememberId", { path: "/" });
+  };
+
+  // ID - Input
+  const changeIdInput = (event) => {
+    const id = event.target.value;
+    setUserid(id);
+  };
+
+  // Login Event
+  const login = () => {
+    if (isRemember) setCookie("rememberId", userid, { path: "/" });
   };
 
   /*============================*/
 
   return (
     <>
-      <h4>User ID</h4>
+      <label htmlFor="">Id : </label>
       <input
         type="email"
         value={userid}
         placeholder="name@domain.com "
-        onChange={(e) => {
-          setUserid(e.target.value);
-        }}
+        onChange={(e) => changeIdInput(e)}
       />
       <p>
-        아이기 기억 :{" "}
+        <label htmlFor="">RememberId : </label>
         <input
           type="checkbox"
-          onChange={(e) => {
-            handleOnChange(e);
-          }}
+          onChange={(e) => rememberIdChange(e)}
           checked={isRemember}
         />
       </p>
 
       {/*  버튼 누르면 쿠키 저장할거임!! */}
-      <button
-        onClick={(e) => {
-          //setCookie("rememberUserId", "edel1212@naver.com", { path: "/" });
-        }}
-      >
-        저장 이벤트 발동!
-      </button>
+      <button onClick={(e) => login()}>저장 이벤트 발동!</button>
     </>
   );
 }
