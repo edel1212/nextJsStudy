@@ -15,3 +15,27 @@
 - `Data fetching` 방식이 크게 변화 하였다.
   - `getStaticProps`, `getServerSideProps`, `getStatigPaht`와 같은 방식들이 사라졌다
 - `App Rotuer`를 사용해야지만 사용할 수 있는 최신 기능을 사용할 수 있다
+
+## APP Router 사용 방법
+
+```properties
+# ℹ️ Page Router 방식과 비교
+# - 페이지는 파일 이름 기반으로 경로와 연결된다.
+#   ㄴ> ✏️ URL : https://domain/about-us
+#      ㄴ> 디렉토리 구조 : app/pages/about-us/index.js
+#
+#   ㄴ> ✏️ URL :  https://domain/about-us/list
+#      ㄴ> 디렉토리 구조 :  app/pages/about-us/list.js
+```
+
+- 디렉토리 생성 후 `page.tsx or js`를 생성 후 export default function 해주면 된다.
+
+  - ✨ 중요 포인트는 `paht`가 되는 디렉토리 내 파일의 명은 `page.?`로 파일명이 고정이라는 것이다.
+
+  ![Alt text](image.png)
+
+- 하위 `Path`가 있는 URL을 구성하고 싶을 경우
+
+  - 폴더를 원하는 Path 구조로 만든 후 `page.?`파일을 생성해 주면 된다.
+
+    ![Alt text](image-1.png)
