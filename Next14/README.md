@@ -14,3 +14,4 @@
 
 - `Data fetching` 방식이 크게 변화 하였다.
   - `getStaticProps`, `getServerSideProps`, `getStatigPaht`와 같은 방식들이 사라졌다
+- `App Rotuer`를 사용해야지만 사용할 수 있는 최신 기능을 사용할 수 있다
