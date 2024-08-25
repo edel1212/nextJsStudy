@@ -1,33 +1,29 @@
-"use client";
+// 1. 목록을 받아올 API 주소
+const URL = "https://nomad-movies.nomadcoders.workers.dev/movies";
 
-import { useEffect, useState } from "react";
+/**
+ * ✨ 2. Server에서 이뤄지는 데이터 Fetching
+ */
+async function getMovies() {
+  try {
+    const response = await fetch(URL);
+    if (!response.ok) throw new Error("Network response was not ok");
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch movies:", error);
+  }
+}
 
-export default function BlackGome() {
-  // 로딩 상태 체크를 위한 변수
-  const [isLoading, setIsLoading] = useState(true);
-  // 데이터를 담을 변수
-  const [movie, setMovie] = useState([]);
-
-  // 1. 해당 컴포넌트가 실행될때 최초 실행을 위함
-  useEffect(() => {
-    getMovie();
-  }, []);
-
-  // 2. 비동기 통신을 통해 데이터를 요청
-  const getMovie = async () => {
-    const res = await fetch(
-      "https://nomad-movies.nomadcoders.workers.dev/movies"
-    );
-    const json = await res.json();
-    // 2.1 변수에 데이터 삽입
-    setMovie(json);
-    // 2.2 로딩 False로 변환
-    setIsLoading(false);
-  };
-
+/**
+ * ℹ️ await를 사용하기위해 UI를 그려주는 default 함수를 "async"로 변경해 줘야한다.
+ */
+export default async function BlackGome() {
+  // 3. await를 사용해서 데이터를 불러오면 끝
+  const movies = await getMovies();
   return (
     <>
-      <h1>{isLoading ? "Loading ..." : JSON.stringify(movie)}</h1>
+      <h1>{JSON.stringify(movies)}</h1>
     </>
   );
 }

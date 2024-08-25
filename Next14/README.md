@@ -288,3 +288,45 @@
     );
   }
   ```
+
+## SSR에서의 Data Fetching
+
+```properties
+# ℹ️ NextJs는 "Frame Work"이기에 내부에서 API를 요청이 가능하다!
+#  - Fetch 된 URL을 자동 캐싱해줌
+```
+
+- 주의 할점은 `default`함수 외부에서 API Fetching 요청을 하는 것이다
+- 예시
+
+  ```javascript
+  // 1. 목록을 받아올 API 주소
+  const URL = "https://nomad-movies.nomadcoders.workers.dev/movies";
+
+  /**
+   * ✨ 2. Server에서 이뤄지는 데이터 Fetching
+   */
+  async function getMovies() {
+    try {
+      const response = await fetch(URL);
+      if (!response.ok) throw new Error("Network response was not ok");
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Failed to fetch movies:", error);
+    }
+  }
+
+  /**
+   * ℹ️ await를 사용하기위해 UI를 그려주는 default 함수를 "async"로 변경해 줘야한다.
+   */
+  export default async function BlackGome() {
+    // 3. await를 사용해서 데이터를 불러오면 끝
+    const movies = await getMovies();
+    return (
+      <>
+        <h1>{JSON.stringify(movies)}</h1>
+      </>
+    );
+  }
+  ```
