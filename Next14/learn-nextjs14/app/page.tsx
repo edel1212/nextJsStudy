@@ -7,7 +7,6 @@ import Navigation from "./components/navigation";
 export default function BlackGome() {
   return (
     <>
-      <Navigation />
       <h1>Hello NextJs!</h1>
     </>
   );
