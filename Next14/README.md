@@ -47,3 +47,20 @@
   - 예약된 파일명으로 NextJs가 자동으로 해당 파일을 확인하여 읽어 404처리를 해준다.
 
   ![Alt text](image-2.png)
+
+## SSR vs CSR
+
+```properties
+# 💬 Rendering이란?
+# - Javascript Function을 가져와서 브라우저가 이해할 수 있는 HTML로 반환하는 과정을 말한다.
+```
+
+- `CSR(Client Side Rendering)`
+  - 모든 UI구축이 Client에서 javasript를 로드 후 해당 script를 통해 이뤄지는 방식
+    - 따라서 Javascrip를 불러올 때까지 화면이 그려지지 않는다.
+    - NextJs14에서 App Router 방식으로 `usePathname();`를 사용하려 하면 에러가 발생하는 이유이기도 하다.
+- `SSR(Server Side Rendering)`
+  - UI 자체가 Server(Back-end)에서 생성 후 HTML로 반환해주는 방식
+    - 모든 컴포넌트오 페이지들은 먼저 Back-End에서 Render 된다.
+  - NextJs14에서는 기본적(Default)으로 해당 방법으로 랜더링을 진행한다.
+  - ✨ `"use client"`를 사용하면 랜더링 방식이 CSR로 바뀌는것이 아니다.
