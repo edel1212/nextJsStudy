@@ -195,3 +195,55 @@
   - 결과
 
     ![Alt text](image-7.png)
+
+## Dynamic Routes
+
+- `Path Variable` 이나 `Query Params`를 받는 방법
+
+  - `Path Variable`
+
+    - 폴더의 구조내 `[원하는 Key명]`의 형태를 만든 후 하위에 `page.tsx`파일을 두면 된다.
+    - 예시
+
+      ![Alt text](image-9.png)
+
+    - 결과 : `http://localhost:3000/movies?page=21`
+      ```properties
+      /movies/123
+      { params: { id: '123' }, searchParams: { page: '21' } }
+      GET /movies/123?page=21 200 in 81ms
+      ```
+    - 효율적 코드 변환
+
+      ```javascript
+      import React from "react";
+      // Interface를 통해 값 고정
+      interface Props {
+        params: { id: string };
+        searchParams: { page: string };
+      }
+
+      export default function movieDetails({ params, searchParams }: Props) {
+        return (
+          <h1>
+            Movie Details :: {params.id} || {searchParams.page}
+          </h1>
+        );
+      }
+      ```
+
+  - `Query Params`
+    - 컴포넌트 내 파라미터를 받으면 된다 -> 아무 파라미터명이나 가능하다
+    - 예시
+      ```javascript
+      export default function movieMain(zero) {
+        // { params: {}, searchParams: { page: '21' } }
+        console.log(zero);
+        return (
+          <h1>
+            Movie 메인페이지 - 해당 화면 컴포넌트가 없으면 "domain/movies" 404가
+            뜸
+          </h1>
+        );
+      }
+      ```
