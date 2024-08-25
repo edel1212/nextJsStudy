@@ -1,13 +1,15 @@
+import Link from "next/link";
+
 // 1. 목록을 받아올 API 주소
-const URL = "https://nomad-movies.nomadcoders.workers.dev/movies";
+export const API_URL = "https://nomad-movies.nomadcoders.workers.dev/movies";
 
 /**
  * ✨ 2. Server에서 이뤄지는 데이터 Fetching
  */
 async function getMovies() {
   try {
-    await new Promise((res) => setTimeout(res, 1000));
-    const response = await fetch(URL);
+    await new Promise((res) => setTimeout(res, 1));
+    const response = await fetch(API_URL);
     if (!response.ok) throw new Error("Network response was not ok");
     const data = await response.json();
     return data;
@@ -24,7 +26,15 @@ export default async function BlackGome() {
   const movies = await getMovies();
   return (
     <>
-      <h1>{JSON.stringify(movies)}</h1>
+      <div>
+        <ul>
+          {movies.map((movie) => (
+            <li key={movie.id}>
+              <Link href={`/movies/${movie.id}`}>{movie.title}</Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </>
   );
 }

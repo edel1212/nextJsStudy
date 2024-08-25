@@ -1,14 +1,21 @@
 import React from "react";
+import { API_URL } from "../../(home)/page";
 
 interface Props {
   params: { id: string };
   searchParams: { page: string };
 }
 
-export default function movieDetails({ params, searchParams }: Props) {
+const getMovie = async (id: string) => {
+  const response = await fetch(`${API_URL}/${id}`);
+  return await response.json();
+};
+
+export default async function movieDetails({ params, searchParams }: Props) {
+  const movie = await getMovie(params.id);
   return (
     <h1>
-      Movie Details :: {params.id} || {searchParams.page}
+      Movie Name : {movie.title} || Movie Id : {params.id}
     </h1>
   );
 }
