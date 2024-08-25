@@ -127,7 +127,7 @@
 - Root `layout.tsx`을 `Path`에 따라 분기하는 방법은 따로 없다.
   - `"use client"`를 사용한다해도 MetaData 사용 불가능하기에 문제가 있음
   - 방법
-    - Root Layout에서 부르는 하위 컴포넌트에서 불기 처리
+    - Root Layout에서 부르는 하위 페이지 컴포넌트에서 분기 처리
     - 상단에서 사용했던 Path별 구분 방법을 사용해서 layout을 여러개 두어 처리하자 ( 👎 원치않는 `path`가 앞에 붙기는 함 )
     - `Route Groups`를 사용 ( 👍 의도치 않은 path가 생성되지 않는다. )
 
@@ -158,3 +158,40 @@
     - banana
 
       ![Alt text](image-6.png)
+
+## MeataData
+
+- 레이아웃과 페이짐나 메타데이터를 export 할 수 있다
+- 각기 다른 레이아웃에 적용하면 덮어씌워지는 개념이 아닌 `Merge`개념이다!
+  - 다른 Root에서 `Title` 현재 위치의 화면 컴포넌트에서 `Description`이라면 2개가 합쳐져서 표시 된다.
+- 사용 방법
+  ```javascript
+  export const metadata = {
+    title: "내가 원하는 타이틀",
+    description:
+      "레이아웃과 페이지라면 적용이 가능하다! 단 Framework이기에 변수명은 고정이다",
+  };
+  ```
+- Template를 사용하면 자주 사용되는 문자은 고정으로 하고 변수를 받아 넣을 수 있다.
+
+  - 예시
+
+    ```javascript
+    /** Root Layout.tsx */
+    export const metadata: Metadata = {
+      title: {
+        template: "%s |  앞에 오는 것은 변수로 치환 함",
+        default: "기본값",
+      },
+      description: "설명 설명",
+    };
+
+    /** about-us pase.tsx */
+    export const metadata: Metadata = {
+      title: "About-Us 페이지",
+    };
+    ```
+
+  - 결과
+
+    ![Alt text](image-7.png)
