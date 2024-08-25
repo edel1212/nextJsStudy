@@ -333,7 +333,7 @@
   }
   ```
 
-## SSR에서의 Loading
+## SSR에서의 Loading 적용
 
 - 자동으로 SSR방식으로 Data Fetching 시 내가 지정한 로딩 화면을 보여준다
 - 주의사항
@@ -349,5 +349,47 @@
 
   export default function loading() {
     return <div>loading</div>;
+  }
+  ```
+
+## Parallel Data Fetching (병렬 처리)
+
+- SSR에서 각각의 요청은 `await`로 선언되어 있기에 순차 처리를 하면 첫번째 요청의 처리 시간만큼 두번째 요청이 진행하지 않는다.
+  - 따라서 `const [대상1, 대상2] = await Promise.all([ 불러오는 대상 , 불러오는 대상2 ])`를 사용해서 병렬처리를 해주자
+- 예시
+
+  ```javascript
+  import React from "react";
+  import { API_URL } from "../../(home)/page";
+
+  interface Props {
+    params: { id: string };
+    searchParams: { page: string };
+  }
+
+  const getMovie = async (id: string) => {
+    const response = await fetch(`${API_URL}/${id}`);
+    return await response.json();
+  };
+
+  const getVideos = async (id: string) => {
+    const response = await fetch(`${API_URL}/${id}/videos`);
+    return await response.json();
+  };
+
+  export default async function movieDetails({ params, searchParams }: Props) {
+    // ✨ await Promise.all를 사용해서 병렬 처리함
+    const [movie, videos] = await Promise.all([
+      getMovie(params.id),
+      getVideos(params.id),
+    ]);
+    return (
+      <>
+        <h1>
+          Movie Name : {movie.title} || Movie Id : {params.id}
+        </h1>
+        <p>Vidoes : {JSON.stringify({ videos })}</p>
+      </>
+    );
   }
   ```

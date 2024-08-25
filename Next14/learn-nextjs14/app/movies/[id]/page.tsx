@@ -11,11 +11,22 @@ const getMovie = async (id: string) => {
   return await response.json();
 };
 
+const getVideos = async (id: string) => {
+  const response = await fetch(`${API_URL}/${id}/videos`);
+  return await response.json();
+};
+
 export default async function movieDetails({ params, searchParams }: Props) {
-  const movie = await getMovie(params.id);
+  const [movie, videos] = await Promise.all([
+    getMovie(params.id),
+    getVideos(params.id),
+  ]);
   return (
-    <h1>
-      Movie Name : {movie.title} || Movie Id : {params.id}
-    </h1>
+    <>
+      <h1>
+        Movie Name : {movie.title} || Movie Id : {params.id}
+      </h1>
+      <p>Vidoes : {JSON.stringify({ videos })}</p>
+    </>
   );
 }
