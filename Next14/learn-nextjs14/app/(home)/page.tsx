@@ -6,6 +6,7 @@ const URL = "https://nomad-movies.nomadcoders.workers.dev/movies";
  */
 async function getMovies() {
   try {
+    await new Promise((res) => setTimeout(res, 1000));
     const response = await fetch(URL);
     if (!response.ok) throw new Error("Network response was not ok");
     const data = await response.json();

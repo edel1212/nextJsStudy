@@ -296,7 +296,9 @@
 #  - Fetch 된 URL을 자동 캐싱해줌
 ```
 
-- 주의 할점은 `default`함수 외부에서 API Fetching 요청을 하는 것이다
+- 주의 사항
+  - `default`함수 외부에서 API Fetching 요청을 하는 것이다
+- CSR, SSR 각각의 장단점이 있으니 원하는 형식을 골라서 사용하자
 - 예시
 
   ```javascript
@@ -328,5 +330,24 @@
         <h1>{JSON.stringify(movies)}</h1>
       </>
     );
+  }
+  ```
+
+## SSR에서의 Loading
+
+- 자동으로 SSR방식으로 Data Fetching 시 내가 지정한 로딩 화면을 보여준다
+- 주의사항
+  - 파일명은 `laoding.tsx` 고정이다.
+  - Loading을 사용하려는 파일의 같은 디렉토리 내에 위치해야한다.
+- 예시
+
+  ![Alt text](image-8.png)
+
+  ```javascript
+  // loading.tsx
+  import React from "react";
+
+  export default function loading() {
+    return <div>loading</div>;
   }
   ```
