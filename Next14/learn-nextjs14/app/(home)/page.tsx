@@ -1,4 +1,4 @@
-import Navigation from "./components/navigation";
+import Navigation from "../components/navigation";
 
 /***
  * ℹ️ Root Segment 이다
