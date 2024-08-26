@@ -352,10 +352,11 @@
   }
   ```
 
-## Parallel Data Fetching (병렬 처리)
+## Parallel Data Fetching (동시 처리)
 
 - SSR에서 각각의 요청은 `await`로 선언되어 있기에 순차 처리를 하면 첫번째 요청의 처리 시간만큼 두번째 요청이 진행하지 않는다.
-  - 따라서 `const [대상1, 대상2] = await Promise.all([ 불러오는 대상 , 불러오는 대상2 ])`를 사용해서 병렬처리를 해주자
+  - 따라서 `const [대상1, 대상2] = await Promise.all([ 불러오는 대상 , 불러오는 대상2 ])`를 사용해서 동시 처리 해주자
+  - 순차 처리에서 동시 처리로 변경 했을뿐 두 요청의 `Data Fetching`이 끝나야 화면에 불러와짐
 - 예시
 
   ```javascript
