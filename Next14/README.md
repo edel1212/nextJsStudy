@@ -396,4 +396,78 @@
   ```
 
 ## Suspense (병렬처리)
-- `await Promise.all([])`로 묶어주면 동시 처리는 되나 병렬적으로 처리는 불가능한 문제가 있다
+```properties
+#  ℹ️ Suspense 뜻 기대감, 흥미, 긴장 .. 사실 기능과 단어와 괴리가 크기에 기준을 알 수 없으나 
+#  ㄴ> 해당 기술을 사용해보면 신기함을 느끼긴한다..!
+# 
+# 😔`await Promise.all([])`로 묶어주면 동시 처리는 되나 병렬적으로 처리는 불가능한 문제가 있다
+```
+- 쉽게 설명하면 `async -> await`로 불러오는 `Data Feting` 들을 각각 다른 컴포넌트로 **분리**해서 불러오는 방법이디.
+- `async -> await`로 데이터를 불러오기에 그냥 일반적인 `import`로 진행할 수 없기다
+  - `<Suspense fallback={불러올때 보여줄 UI 지정}> <await 로 불러오는 컴포넌트/> </Suspense>`로 불러오면된다.
+- 예시
+  - MovieInfo 컴포넌트
+
+    ```javascript
+    import { API_URL } from "../(home)/page";
+
+    const getMovie = async (id: string) => {
+        const response = await fetch(`${API_URL}/${id}`);
+        return await response.json();
+    };
+
+    export default async function MovieInfo({id} : {id:string}){
+        const movie = await getMovie(id);
+        return <h6>{JSON.stringify(movie)}</h6>
+    }
+    ```
+
+  - MovieVideos 컴포넌트
+
+    ```javascript
+    import { API_URL } from "../(home)/page";
+
+    const getVideos = async (id: string) => {
+        const response = await fetch(`${API_URL}/${id}/videos`);
+        return await response.json();
+      };
+
+
+      export default async function MovieVidoes({id} : {id:string}){
+        const vidoes = await getVideos(id);
+        return <h6>{JSON.stringify(vidoes)}</h6>
+      }
+    ```
+
+  - 해당 두 컴포넌트를 불러오는 UI 페이지
+    - `Suspense` 컴포넌트를 통해 동기식 데이터를 불러온다
+    - async 선언이 사라졌음 따라서 "use client" 사용이 가능해짐
+
+    ```javascript
+    import React, { Suspense, useState } from "react";
+    import MovieInfo from "../../components/MovieInfo";
+    import MovieVidoes from "../../components/MovieVideos";
+
+    interface Props {
+      params: { id: string };
+      searchParams: { page: string };
+    }
+
+    /**
+     * 👍 해당 매서드에서 await 데이터를 직접 call 하지 않기에
+    *    ㄴ> async 선언이 사라졌음 따라서 "use client" 사용이 가능해짐
+    */
+    export default function movieDetails({ params, searchParams }: Props) {
+      return (
+        <>  
+          {/* 👍 fallback을 통해 로딩중 보여질 UI 사용 */}
+          <Suspense fallback={<h1>영화 정보 로딩중</h1>}>
+            <MovieInfo id={params.id}/>
+          </Suspense>
+          <Suspense fallback={<h1>영화 영상 로딩중</h1>}>
+          <MovieVidoes id={params.id}/>
+          </Suspense>
+        </>
+      );
+    }
+    ```
