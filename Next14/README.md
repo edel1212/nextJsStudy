@@ -471,3 +471,18 @@
       );
     }
     ```
+
+## Error 페이지 처리
+- 주의사항
+  - 파일명은 반드시 `error.?`여야 한다
+  -  Error가 발생할 UI 컴포넌트 옆에 `error.tsx`파일을 생성해 줘야한다
+    - ℹ️ 해당 처리는 각각의 같은 디렉토리의 UI 컴포넌트의 에러에만 해당 된다.
+  - 해당 처리는 에러 페이지 처리일뿐 예외 처릭 아니기에 예외 처리는 따로 해주는 것이 맞다
+- ℹ️ 화면 단에서의 처리이기에  처리하려는 `Error.tsx`에 `"use client";` 선언을 해줘야한다.
+- 예시
+  ```javascript
+  "use client";
+  export default function Error(){
+      return <h1>Error 처리 "use client"; 선언을 꼭 해주자</h1>
+  }
+  ```
