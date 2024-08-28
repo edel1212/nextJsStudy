@@ -3,6 +3,7 @@
 import Link from "next/link";
 import styles from "../../styles/movie.module.css";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface IMovieProps {
   title: string;
@@ -10,14 +11,22 @@ interface IMovieProps {
   poster_path: string;
 }
 
+/**
+ * 👍 SSR(Main Page) -> CSR(현재 컴포넌트)를 불러서 사용
+ */
 export default function Movie({ title, id, poster_path }: IMovieProps) {
   const router = useRouter();
-  const onClick = () => {
-    router.push(`/movies/${id}`);
-  };
   return (
     <div className={styles.movie}>
-      <img src={poster_path} alt={title} onClick={onClick} />
+      <Image
+        width={"300"}
+        height={"300"}
+        src={poster_path}
+        alt={title}
+        onClick={() => {
+          router.push(`/movies/${id}`);
+        }}
+      />
       <Link prefetch href={`/movies/${id}`}>
         {title}
       </Link>
