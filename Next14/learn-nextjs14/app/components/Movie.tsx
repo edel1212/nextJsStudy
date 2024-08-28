@@ -15,6 +15,7 @@ interface IMovieProps {
  * 👍 SSR(Main Page) -> CSR(현재 컴포넌트)를 불러서 사용
  */
 export default function Movie({ title, id, poster_path }: IMovieProps) {
+  //  👍 HOOK 사용
   const router = useRouter();
   return (
     <div className={styles.movie}>
@@ -23,6 +24,7 @@ export default function Movie({ title, id, poster_path }: IMovieProps) {
         height={"300"}
         src={poster_path}
         alt={title}
+        //  👍 Click Event 사용
         onClick={() => {
           router.push(`/movies/${id}`);
         }}
