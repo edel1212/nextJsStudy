@@ -500,4 +500,40 @@
   }
   ```    
 
-  
+## CSS Module
+- 이전 버전과 크게 다르지 않다. CSS 파일 자치를 Object로 봐서 겹치지 않게 하기 위해 사용
+- 주의사항
+  - `module`이 꼭 포함 되어 있어야한다.
+  - `CSS` 내 선언할 때 `Class Name or Id`로 선언해야한다.
+    - 😱 사용 불가) : `h1{ ~~ };`
+    - 👍 사용 가능) : `.nav h1{~~};`
+- 사용 방법
+  - `원하는명칭.module.css`로 파일을 생성
+  -  사용할 곳에서 `import`
+    - `import style from "../../styles/navigation.module.css";`
+  - `Object`객체를 부르는 것 처럼 사용
+    -  `<nav className={style.nav}>` 
+- 예시
+  - CSS Module
+    ```properties
+    /* Only Class or Id Name 만 사용할 수 있다. */
+    .nav {
+      background-color: blue;
+      padding: 50px 100px;
+    }
+    
+    .nav ul li a {
+      display: flex;
+    }
+    ```
+  - 적용 UI
+    ```javascript
+    import style from "../../styles/navigation.module.css";
+    
+    export default function Navigation() {
+      console.log(path);
+      return (
+        <nav className={style.nav}></nav>
+      );
+    }
+    ```     
