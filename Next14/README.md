@@ -486,3 +486,18 @@
       return <h1>Error 처리 "use client"; 선언을 꼭 해주자</h1>
   }
   ```
+
+## Global CSS
+- `Gobacl CSS`의 경우 전체적으로 적용되는 CSS이기에 따료 모듈화 할 필요가 없다.
+- 사용방법
+  - 디렉토리명 및 파일명의 강제성은 없지만 가독성이 좋게 하기 위해 정정 파일을 관리하는 `public`폴더에 넣으면 좋다.
+  - `css`파일 생성 후 `Root layout.tsx`파일에 import 해주면된다.
+  ```javascript
+  // (root) layout.tsx
+  import "../styles/global.css";
+  export default function RootLayout({
+    // code ..
+  }
+  ```    
+
+  
