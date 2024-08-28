@@ -1,32 +1,26 @@
-import React from "react";
-import { API_URL } from "../../(home)/page";
+import React, { Suspense, useState } from "react";
+import MovieInfo from "../../components/MovieInfo";
+import MovieVidoes from "../../components/MovieVideos";
 
 interface Props {
   params: { id: string };
   searchParams: { page: string };
 }
 
-const getMovie = async (id: string) => {
-  const response = await fetch(`${API_URL}/${id}`);
-  return await response.json();
-};
-
-const getVideos = async (id: string) => {
-  const response = await fetch(`${API_URL}/${id}/videos`);
-  return await response.json();
-};
-
-export default async function movieDetails({ params, searchParams }: Props) {
-  const [movie, videos] = await Promise.all([
-    getMovie(params.id),
-    getVideos(params.id),
-  ]);
+/**
+ * 👍 해당 매서드에서 await 데이터를 직접 call 하지 않기에
+ *    ㄴ> async 선언이 사라졌음 따라서 "use client" 사용또한 가능해짐
+ */
+export default function movieDetails({ params, searchParams }: Props) {
   return (
-    <>
-      <h1>
-        Movie Name : {movie.title} || Movie Id : {params.id}
-      </h1>
-      <p>Vidoes : {JSON.stringify({ videos })}</p>
+    <>  
+      {/* 👍 fallback을 통해 로딩중 보여질 UI 사용 */}
+      <Suspense fallback={<h1>영화 정보 로딩중</h1>}>
+        <MovieInfo id={params.id}/>
+      </Suspense>
+      <Suspense fallback={<h1>영화 영상 로딩중</h1>}>
+      <MovieVidoes id={params.id}/>
+      </Suspense>
     </>
   );
 }

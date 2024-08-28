@@ -352,10 +352,11 @@
   }
   ```
 
-## Parallel Data Fetching (병렬 처리)
+## Parallel Data Fetching (동시 처리)
 
 - SSR에서 각각의 요청은 `await`로 선언되어 있기에 순차 처리를 하면 첫번째 요청의 처리 시간만큼 두번째 요청이 진행하지 않는다.
-  - 따라서 `const [대상1, 대상2] = await Promise.all([ 불러오는 대상 , 불러오는 대상2 ])`를 사용해서 병렬처리를 해주자
+  - 따라서 `const [대상1, 대상2] = await Promise.all([ 불러오는 대상 , 불러오는 대상2 ])`를 사용해서 동시 처리 해주자
+  - 순차 처리에서 동시 처리로 변경 했을뿐 두 요청의 `Data Fetching`이 끝나야 화면에 불러와짐
 - 예시
 
   ```javascript
@@ -391,5 +392,97 @@
         <p>Vidoes : {JSON.stringify({ videos })}</p>
       </>
     );
+  }
+  ```
+
+## Suspense (병렬처리)
+```properties
+#  ℹ️ Suspense 뜻 기대감, 흥미, 긴장 .. 사실 기능과 단어와 괴리가 크기에 기준을 알 수 없으나 
+#  ㄴ> 해당 기술을 사용해보면 신기함을 느끼긴한다..!
+# 
+# 😔`await Promise.all([])`로 묶어주면 동시 처리는 되나 병렬적으로 처리는 불가능한 문제가 있다
+```
+- 쉽게 설명하면 `async -> await`로 불러오는 `Data Feting` 들을 각각 다른 컴포넌트로 **분리**해서 불러오는 방법이디.
+- `async -> await`로 데이터를 불러오기에 그냥 일반적인 `import`로 진행할 수 없기다
+  - `<Suspense fallback={불러올때 보여줄 UI 지정}> <await 로 불러오는 컴포넌트/> </Suspense>`로 불러오면된다.
+- 예시
+  - MovieInfo 컴포넌트
+
+    ```javascript
+    import { API_URL } from "../(home)/page";
+
+    const getMovie = async (id: string) => {
+        const response = await fetch(`${API_URL}/${id}`);
+        return await response.json();
+    };
+
+    export default async function MovieInfo({id} : {id:string}){
+        const movie = await getMovie(id);
+        return <h6>{JSON.stringify(movie)}</h6>
+    }
+    ```
+
+  - MovieVideos 컴포넌트
+
+    ```javascript
+    import { API_URL } from "../(home)/page";
+
+    const getVideos = async (id: string) => {
+        const response = await fetch(`${API_URL}/${id}/videos`);
+        return await response.json();
+      };
+
+
+      export default async function MovieVidoes({id} : {id:string}){
+        const vidoes = await getVideos(id);
+        return <h6>{JSON.stringify(vidoes)}</h6>
+      }
+    ```
+
+  - 해당 두 컴포넌트를 불러오는 UI 페이지
+    - `Suspense` 컴포넌트를 통해 동기식 데이터를 불러온다
+    - async 선언이 사라졌음 따라서 "use client" 사용이 가능해짐
+
+    ```javascript
+    import React, { Suspense, useState } from "react";
+    import MovieInfo from "../../components/MovieInfo";
+    import MovieVidoes from "../../components/MovieVideos";
+
+    interface Props {
+      params: { id: string };
+      searchParams: { page: string };
+    }
+
+    /**
+     * 👍 해당 매서드에서 await 데이터를 직접 call 하지 않기에
+    *    ㄴ> async 선언이 사라졌음 따라서 "use client" 사용이 가능해짐
+    */
+    export default function movieDetails({ params, searchParams }: Props) {
+      return (
+        <>  
+          {/* 👍 fallback을 통해 로딩중 보여질 UI 사용 */}
+          <Suspense fallback={<h1>영화 정보 로딩중</h1>}>
+            <MovieInfo id={params.id}/>
+          </Suspense>
+          <Suspense fallback={<h1>영화 영상 로딩중</h1>}>
+          <MovieVidoes id={params.id}/>
+          </Suspense>
+        </>
+      );
+    }
+    ```
+
+## Error 페이지 처리
+- 주의사항
+  - 파일명은 반드시 `error.?`여야 한다
+  -  Error가 발생할 UI 컴포넌트 옆에 `error.tsx`파일을 생성해 줘야한다
+    - ℹ️ 해당 처리는 각각의 같은 디렉토리의 UI 컴포넌트의 에러에만 해당 된다.
+  - 해당 처리는 에러 페이지 처리일뿐 예외 처릭 아니기에 예외 처리는 따로 해주는 것이 맞다
+- ℹ️ 화면 단에서의 처리이기에  처리하려는 `Error.tsx`에 `"use client";` 선언을 해줘야한다.
+- 예시
+  ```javascript
+  "use client";
+  export default function Error(){
+      return <h1>Error 처리 "use client"; 선언을 꼭 해주자</h1>
   }
   ```
