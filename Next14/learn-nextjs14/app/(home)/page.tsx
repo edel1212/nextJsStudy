@@ -1,4 +1,5 @@
-import Link from "next/link";
+import Movie from "../components/Movie";
+import styles from "../../styles/movie.module.css";
 
 // 1. 목록을 받아올 API 주소
 export const API_URL = "https://nomad-movies.nomadcoders.workers.dev/movies";
@@ -26,14 +27,15 @@ export default async function BlackGome() {
   const movies = await getMovies();
   return (
     <>
-      <div>
-        <ul>
-          {movies.map((movie) => (
-            <li key={movie.id}>
-              <Link href={`/movies/${movie.id}`}>{movie.title}</Link>
-            </li>
-          ))}
-        </ul>
+      <div className={styles.container}>
+        {movies.map((movie) => (
+          <Movie
+            key={movie.id}
+            id={movie.id}
+            poster_path={movie.poster_path}
+            title={movie.title}
+          />
+        ))}
       </div>
     </>
   );
