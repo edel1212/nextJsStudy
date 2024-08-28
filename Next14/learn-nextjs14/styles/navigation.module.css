@@ -1,0 +1,9 @@
+/* Only Class or Id Name 만 사용할 수 있다. */
+.nav {
+  background-color: blue;
+  padding: 50px 100px;
+}
+
+.nav ul li a {
+  display: flex;
+}
