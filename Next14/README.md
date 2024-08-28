@@ -551,7 +551,7 @@
   -   그려질 UI를 컴포넌트로 분리
   -   분리된 UI에 `"use client"`선언을 통해 `Hydration` 적용
 -  예시
-  - 메인 페이지 (`SSR)`
+  - 메인 페이지 (`SSR`)
       ```javascript
       import Movie from "../components/Movie";
       import styles from "../../styles/movie.module.css";
@@ -599,7 +599,7 @@
         );
       }
       ```
-  - UI 컴포넌트 (CSR)
+  - UI 컴포넌트 (`CSR`)
     ```javascript
     "use client";
     
