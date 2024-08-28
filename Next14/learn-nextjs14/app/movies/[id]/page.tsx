@@ -1,6 +1,6 @@
 import React, { Suspense, useState } from "react";
 import MovieInfo, { getMovie } from "../../components/MovieInfo";
-import MovieVidoes from "../../components/MovieVideos";
+import MovieVideos from "../../components/movie-videos";
 interface IParams {
   params: { id: string };
 }
@@ -24,7 +24,7 @@ export default function MovieDetailPage({ params: { id } }: IParams) {
         <MovieInfo id={id} />
       </Suspense>
       <Suspense fallback={<h1>영화 영상 로딩중</h1>}>
-        <MovieVidoes id={id} />
+        <MovieVideos id={id} />
       </Suspense>
     </>
   );
