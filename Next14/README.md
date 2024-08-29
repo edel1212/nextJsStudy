@@ -639,3 +639,38 @@
       );
     }
     ```
+
+## Dynamic Metadate
+```properties
+# Next 최신 버전에서는 자동으로 캐싱을 지원하기에 한번 사용했던 Data는 다시 요청하지 않고 캐시 데이터를 사용한다.
+```
+- 주의사항
+  -  `export`형태의 함수여야한다.
+    - 따로 호출하는 부분이 없어도 괜찮다 Next Framework에서 자동으로 사용해줌
+  - 함수명은 무조건 `generateMetadata`형태여야 한다.
+    - ℹ️ Override 형태이므로  `export const metadata` 형태로 지정할 경우에는 이와 같이 사용해도 무관
+  - 메인 화면을 반환하는 컴포넌트의 `props`를 같이 공유 받는다.
+    - `export async function generateMetadata({ params: { id } }: IParams)` 와 같이 `params`을 받아 사용 가능함
+  - `await` 함수 데이터를 받아오므로 `async`를 붙여주자
+- 예시
+  ```javascript
+  interface IParams {
+    params: { id: string };
+  }
+  
+  // ℹ️ { params: { id }를 공유받아 같이 사용이 가능하다
+  export async function generateMetadata({ params: { id } }: IParams) {
+    const movie = await getMovie(id);
+    return {
+      title: movie.title,
+    };
+  }
+  
+  export default function MovieDetailPage({ params: { id } }: IParams) {
+    return (
+      <>
+        {/* Main ComponentCode.. */}
+      </>
+    );
+  }
+  ```
