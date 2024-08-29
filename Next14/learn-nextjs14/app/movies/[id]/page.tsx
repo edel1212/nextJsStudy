@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense } from "react";
 import MovieInfo, { getMovie } from "../../components/MovieInfo";
 import MovieVideos from "../../components/movie-videos";
 interface IParams {
