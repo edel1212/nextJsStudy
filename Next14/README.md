@@ -674,3 +674,81 @@
     );
   }
   ```
+
+## Caching 이슈 및 해결 방법
+- SSR에서 문제
+  - 새로운 데이터가 업데이트되는 실시간 정보를 다루는 웹에는 부적합하고, 동적 컨텐츠를 처리하는데 한계가 있다.
+  - 방법이 전혀 없는 것은 아니다 `revalidate` 설정을 해주면 된다. (`IRS`)
+  - 예시 1
+    ```javascript
+    export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
+      let post = await fetch(`https://api.vercel.app/blog/${params.id}`).then(
+        (res) => res.json()
+      )
+     
+      return {
+        props: { post },
+        // Next.js will invalidate the cache when a
+        // request comes in, at most once every 60 seconds.
+        revalidate: 60,
+      }
+    }
+    ```
+  - 예시 2
+    ```javascript
+    import { NextPage } from "next";
+    import React from "react";
+    
+    interface Product {
+      id: number;
+      name: string;
+      price: number;
+    }
+    
+    // Mock data fetching function
+    const fetchProducts = async (): Promise<Product[]> => {
+      console.log(new Date().toISOString());
+      // Simulate fetching data from an API or database
+      return [
+        { id: 1, name: new Date().toISOString(), price: 29.99 },
+        { id: 2, name: "Product B", price: 19.99 },
+        { id: 3, name: "Product C", price: 39.99 },
+      ];
+    };
+    
+    const ProductsPage: NextPage = async () => {
+      const products = await fetchProducts();
+    
+      return (
+        <div>
+          <h1>Products</h1>
+          <ul>
+            {products.map((product) => (
+              <li key={product.id}>
+                {product.name} - ${product.price}
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    };
+    
+    export const revalidate = 1;
+    
+    export default ProductsPage;
+    ```
+- 예시 3
+  ```javascript
+  const data = await fetch('https://api.example.com/data', {
+    next: { revalidate: 10 }  // 10초마다 새로운 데이터를 확인합니다.
+  }).then(res => res.json());
+  ```
+- Fetch Cache 설정 변경
+
+```javascript
+const data = await fetch('https://api.example.com/data', {
+  headers: {
+    'Cache-Control': 'no-cache'  // 항상 최신 데이터를 가져옵니다.
+  }
+}).then(res => res.json());
+```
