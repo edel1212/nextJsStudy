@@ -1,40 +1,37 @@
-# NextJsStudy
+# NextJs
 
-## NextJs의 특징
+```properties
+# ℹ️ NextJs의 특징
+#  - `Framework`이다.
+#  - 정해진 틀(`Frame`)이 정해져 있고 그 틀에 맞춰서 개발을 진행하면 쉽게 구현이 가능하다.
+#  - 기본적으로 필요한 Library가 설치 되어 있으며 필요한 경우 추가하는 식으로 진행하면 된다.
+```
 
-- `Framework`이다.
-  - 틀이 정해져 있고 그 틀에 맞춰서 사용하기만 하면된다.
-  - 정해진 틀에 위치에 코드를 맞춰서 사용만 해주면 더욱 편하게 개발을 진행 할 수 있다.
-  - 기본적으로 필요한 Library를 내장하고있다.
-  - 필요한 설정이 기본적으로 되어있단 - 404 페이지 등등 ..
-- `Library`와`Framework`의 차이점
-  - `Library`의 경우 내가 사용 하여 개발만 하는 개념이다 대체로 내가 원하는 방향으로 사용해서 개발하면 되는 개념임
-    - `create-react-app`으로 생각하면 쉽다.
-      - App.js가 존재함
-      - Component를 모아둘 폴더를 아무 이름이나 생성해서 넣은 다음 Import해서 써도됨
-      - Router를 사용할 폴더도 위와 같은 개념으로 사용 해도된다. - 틀이 없기에 자유로움 내가 직접 기준을 만들어 개발하면 됨
-  - `Framework`의 경우 위에 설명과 같이 틀이 정해져있어 그틀에 맞춰 개발하면 된다.
-    - `create-next-app`으로 생각하면 쉽다.
-      - pages폴더 안에 `index.js`이름으로 리엑트 컴포넌트를 생성하면 어떠한 라우터, 랜더링 설정 없이도 `127.0.0.0:3000`로 접근하면 해당 컴포넌트가 실행된다.
-        - `Framework`이기 때문에 추상화 되어있는 상태로 이미 pages폴더 안의 파일을 `home`으로 지정되어 있기 때문이다!!
-          ```javascript
-          // index.js
-          // 👉 함수명이 어떤것이든 상관없음!!
-          export default function Foo() {
-            return "Hi~";
-          }
-          ```
+## `Library`와`Framework`의 차이
 
-<br/>
-<hr/>
+- Library
+  - 내가 사용 하여 개발만 하는 개념이다 대체로 **내가 원하는 방향으로 사용해서 개발**하면 되는 개념이다.
+    - 기본적인 `React.js`로 생각 하며 비교하면 쉽다
+      - 틀이 없기에 자유로움 내가 직접 기준을 만들어 개발하면 된다.
+        - 디렉토리 구조나 파일명 등 틀이 정해져 있지 않다.
+- Framework
+  - 틀이 정해져있어 그 **틀에 맞춰 개발**하면 된다.
+  - NextJs를 생각하여 비교하면 된다.
+  - 틀이 정해져 있기에 정해진 방식의 라우팅 방식 `Page or App Route`방식에 맞춰 디렉토리 구조 및 파일명이 있다.
+    - 정해진 해당 프레임워크에 선점되어 있는 변수명등이 정해져 있다.
+  - `IoC(Inversion of Control) - 제어의 역전`을 생각하면 된다.
+    - 메소드나 객체의 호출작업을 개발자가 결정하는 것이 아니라 외부에서 결정한다.
 
-## 설치방법 및 서버 실행
+## 설치 방법 및 서버 실행
 
 - `npx create-next-app@latest` 명령어를 사용해서 nextJs 프로젝트를 생성해준다.
-  - 터미널에서 각각 맞는 옵션을 맞게 선택해 주자.
+  - 옵션
     - Would you like to use TypeScript?
+      - 타입스크립트 사용 여부
     - Would you like to use ESLint?
+      - EsLint 사용 여부
     - Would you like to use Tailwind CSS?
+      - Tailwind CSS 사용 여부
     - Would you like to use `src/` directory?
       - 사용 하면 src 디렉토리 생성된다.
     - Would you like to use App Router? (recommended)
@@ -43,7 +40,9 @@
         - 최근에는 `App` 라우팅 방식이 생성되었다.
           - `React`에서 추천하는 방법이다. [13버전부터 추가 되었음]
     - Would you like to customize the default import alias (@/\*)?
-- `npm run dev`를 사용하면 서버 실행
+      - Import 시 별칭을 만들어서 불러올지 여부
+  - 서버 실행
+    - `npm run dev`
 
 <br/>
 <hr/>
