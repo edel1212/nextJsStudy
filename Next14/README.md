@@ -1,4 +1,4 @@
-# Next.Js 14 Version
+# NextJs 14
 
 ```properties
 # ✨ 이전 버전을 14버전으로 업데이트 한다고해서 실행이 안되거나 하지 않는다.
@@ -396,29 +396,32 @@
   ```
 
 ## Suspense (병렬처리)
+
 ```properties
-#  ℹ️ Suspense 뜻 기대감, 흥미, 긴장 .. 사실 기능과 단어와 괴리가 크기에 기준을 알 수 없으나 
+#  ℹ️ Suspense 뜻 기대감, 흥미, 긴장 .. 사실 기능과 단어와 괴리가 크기에 기준을 알 수 없으나
 #  ㄴ> 해당 기술을 사용해보면 신기함을 느끼긴한다..!
-# 
+#
 # 😔`await Promise.all([])`로 묶어주면 동시 처리는 되나 병렬적으로 처리는 불가능한 문제가 있다
 ```
+
 - 쉽게 설명하면 `async -> await`로 불러오는 `Data Feting` 들을 각각 다른 컴포넌트로 **분리**해서 불러오는 방법이디.
 - `async -> await`로 데이터를 불러오기에 그냥 일반적인 `import`로 진행할 수 없기다
   - `<Suspense fallback={불러올때 보여줄 UI 지정}> <await 로 불러오는 컴포넌트/> </Suspense>`로 불러오면된다.
 - 예시
+
   - MovieInfo 컴포넌트
 
     ```javascript
     import { API_URL } from "../(home)/page";
 
     const getMovie = async (id: string) => {
-        const response = await fetch(`${API_URL}/${id}`);
-        return await response.json();
+      const response = await fetch(`${API_URL}/${id}`);
+      return await response.json();
     };
 
-    export default async function MovieInfo({id} : {id:string}){
-        const movie = await getMovie(id);
-        return <h6>{JSON.stringify(movie)}</h6>
+    export default async function MovieInfo({ id }: { id: string }) {
+      const movie = await getMovie(id);
+      return <h6>{JSON.stringify(movie)}</h6>;
     }
     ```
 
@@ -428,18 +431,18 @@
     import { API_URL } from "../(home)/page";
 
     const getVideos = async (id: string) => {
-        const response = await fetch(`${API_URL}/${id}/videos`);
-        return await response.json();
-      };
+      const response = await fetch(`${API_URL}/${id}/videos`);
+      return await response.json();
+    };
 
-
-      export default async function MovieVidoes({id} : {id:string}){
-        const vidoes = await getVideos(id);
-        return <h6>{JSON.stringify(vidoes)}</h6>
-      }
+    export default async function MovieVidoes({ id }: { id: string }) {
+      const vidoes = await getVideos(id);
+      return <h6>{JSON.stringify(vidoes)}</h6>;
+    }
     ```
 
   - 해당 두 컴포넌트를 불러오는 UI 페이지
+
     - `Suspense` 컴포넌트를 통해 동기식 데이터를 불러온다
     - async 선언이 사라졌음 따라서 "use client" 사용이 가능해짐
 
@@ -455,17 +458,17 @@
 
     /**
      * 👍 해당 매서드에서 await 데이터를 직접 call 하지 않기에
-    *    ㄴ> async 선언이 사라졌음 따라서 "use client" 사용이 가능해짐
-    */
+     *    ㄴ> async 선언이 사라졌음 따라서 "use client" 사용이 가능해짐
+     */
     export default function movieDetails({ params, searchParams }: Props) {
       return (
-        <>  
+        <>
           {/* 👍 fallback을 통해 로딩중 보여질 UI 사용 */}
           <Suspense fallback={<h1>영화 정보 로딩중</h1>}>
-            <MovieInfo id={params.id}/>
+            <MovieInfo id={params.id} />
           </Suspense>
           <Suspense fallback={<h1>영화 영상 로딩중</h1>}>
-          <MovieVidoes id={params.id}/>
+            <MovieVidoes id={params.id} />
           </Suspense>
         </>
       );
@@ -473,21 +476,23 @@
     ```
 
 ## Error 페이지 처리
+
 - 주의사항
   - 파일명은 반드시 `error.?`여야 한다
-  -  Error가 발생할 UI 컴포넌트 옆에 `error.tsx`파일을 생성해 줘야한다
-    - ℹ️ 해당 처리는 각각의 같은 디렉토리의 UI 컴포넌트의 에러에만 해당 된다.
+  - Error가 발생할 UI 컴포넌트 옆에 `error.tsx`파일을 생성해 줘야한다
+  - ℹ️ 해당 처리는 각각의 같은 디렉토리의 UI 컴포넌트의 에러에만 해당 된다.
   - 해당 처리는 에러 페이지 처리일뿐 예외 처릭 아니기에 예외 처리는 따로 해주는 것이 맞다
-- ℹ️ 화면 단에서의 처리이기에  처리하려는 `Error.tsx`에 `"use client";` 선언을 해줘야한다.
+- ℹ️ 화면 단에서의 처리이기에 처리하려는 `Error.tsx`에 `"use client";` 선언을 해줘야한다.
 - 예시
   ```javascript
   "use client";
-  export default function Error(){
-      return <h1>Error 처리 "use client"; 선언을 꼭 해주자</h1>
+  export default function Error() {
+    return <h1>Error 처리 "use client"; 선언을 꼭 해주자</h1>;
   }
   ```
 
 ## Global CSS
+
 - `Gobacl CSS`의 경우 전체적으로 적용되는 CSS이기에 따료 모듈화 할 필요가 없다.
 - 사용방법
   - 디렉토리명 및 파일명의 강제성은 없지만 가독성이 좋게 하기 위해 정정 파일을 관리하는 `public`폴더에 넣으면 좋다.
@@ -498,9 +503,10 @@
   export default function RootLayout({
     // code ..
   }
-  ```    
+  ```
 
 ## CSS Module
+
 - 이전 버전과 크게 다르지 않다. CSS 파일 자치를 Object로 봐서 겹치지 않게 하기 위해 사용
 - 주의사항
   - `module`이 꼭 포함 되어 있어야한다.
@@ -509,155 +515,165 @@
     - 👍 사용 가능) : `.nav h1{~~};`
 - 사용 방법
   - `원하는명칭.module.css`로 파일을 생성
-  -  사용할 곳에서 `import`
-    - `import style from "../../styles/navigation.module.css";`
+  - 사용할 곳에서 `import`
+  - `import style from "../../styles/navigation.module.css";`
   - `Object`객체를 부르는 것 처럼 사용
-    -  `<nav className={style.nav}>` 
+    - `<nav className={style.nav}>`
 - 예시
+
   - CSS Module
+
     ```properties
     /* Only Class or Id Name 만 사용할 수 있다. */
     .nav {
       background-color: blue;
       padding: 50px 100px;
     }
-    
+
     .nav ul li a {
       display: flex;
     }
     ```
+
   - 적용 UI
+
     ```javascript
     import style from "../../styles/navigation.module.css";
-    
+
     export default function Navigation() {
       console.log(path);
-      return (
-        <nav className={style.nav}></nav>
-      );
+      return <nav className={style.nav}></nav>;
     }
-    ```     
+    ```
 
 ## SSR에서 "use client"가 필요할 경우
+
 ```properties
 # ℹ️ 그렇게 사용할 수 있는 방법은 없다.
 #   ㄴ> 단! 컴포넌트 분리를 통해 적용이 가능하다.
 ```
+
 - 시나리오
   - 메인 화면 `SSR Route`를 통해 목록을 받아옴
   - 해당 받아온 목록에 `Click Event`와 `useRouter()` Hook을 사용하고 싶음
 - 방법
-  -   메인페이지에서 `SSR Rorute`목올을 받아옴
-  -   그려질 UI를 컴포넌트로 분리
-  -   분리된 UI에 `"use client"`선언을 통해 `Hydration` 적용
--  예시
-  - 메인 페이지 (`SSR`)
-      ```javascript
-      import Movie from "../components/Movie";
-      import styles from "../../styles/movie.module.css";
-      
-      export const API_URL = "https://nomad-movies.nomadcoders.workers.dev/movies";
-      
-      /**
-       * fetch를 통해 데이터 목록을 받아옴
-       */
-      async function getMovies() {
-        try {
-          await new Promise((res) => setTimeout(res, 1));
-          const response = await fetch(API_URL);
-          if (!response.ok) throw new Error("Network response was not ok");
-          const data = await response.json();
-          return data;
-        } catch (error) {
-          console.error("Failed to fetch movies:", error);
-        } // try - catch
-      }
-      
-      /**
-       * SSR을 사용한 UI 컴포넌트
-       * ㄴ> async 필수 ::  await로 함수 데이터를 받기 때문
-       */
-      export default async function MainPage() {
-        //  SSR 방식으로 데이터를 요청함
-        const movies = await getMovies();
-        return (
-          <>
-            <div className={styles.container}>
-              {movies.map((movie) => (
-                // 😱 Click 이벤트를 주고 싶지면 SSR이기에 줄 수 가없음
-                //   ㄴ> 그렇기에 해당 Movie 컴포넌트 내부에서 "use client"선언을 통해
-                //       해당 컴포넌트에 "Hydration" 적용하여 사용 할 수있다.
-                <Movie
-                  key={movie.id}
-                  id={movie.id}
-                  poster_path={movie.poster_path}
-                  title={movie.title}
-                />
-              ))}
-            </div>
-          </>
-        );
-      }
-      ```
-  - UI 컴포넌트 (`CSR`)
-    ```javascript
-    "use client";
-    
-    import Link from "next/link";
-    import styles from "../../styles/movie.module.css";
-    import { useRouter } from "next/navigation";
-    import Image from "next/image";
-    
-    interface IMovieProps {
-      title: string;
-      id: string;
-      poster_path: string;
-    }
-    
-    /**
-     * 👍 SSR(Main Page) -> CSR(현재 컴포넌트)를 불러서 사용
-     */
-    export default function Movie({ title, id, poster_path }: IMovieProps) {
-      //  👍 HOOK 사용
-      const router = useRouter();
-      return (
-        <div className={styles.movie}>
-          <Image
-            width={"300"}
-            height={"300"}
-            src={poster_path}
-            alt={title}
-            //  👍 Click Event 사용
-            onClick={() => {
-              router.push(`/movies/${id}`);
-            }}
-          />
-          <Link prefetch href={`/movies/${id}`}>
-            {title}
-          </Link>
+  - 메인페이지에서 `SSR Rorute`목올을 받아옴
+  - 그려질 UI를 컴포넌트로 분리
+  - 분리된 UI에 `"use client"`선언을 통해 `Hydration` 적용
+- 예시
+- 메인 페이지 (`SSR`)
+
+  ```javascript
+  import Movie from "../components/Movie";
+  import styles from "../../styles/movie.module.css";
+
+  export const API_URL = "https://nomad-movies.nomadcoders.workers.dev/movies";
+
+  /**
+   * fetch를 통해 데이터 목록을 받아옴
+   */
+  async function getMovies() {
+    try {
+      await new Promise((res) => setTimeout(res, 1));
+      const response = await fetch(API_URL);
+      if (!response.ok) throw new Error("Network response was not ok");
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Failed to fetch movies:", error);
+    } // try - catch
+  }
+
+  /**
+   * SSR을 사용한 UI 컴포넌트
+   * ㄴ> async 필수 ::  await로 함수 데이터를 받기 때문
+   */
+  export default async function MainPage() {
+    //  SSR 방식으로 데이터를 요청함
+    const movies = await getMovies();
+    return (
+      <>
+        <div className={styles.container}>
+          {movies.map((movie) => (
+            // 😱 Click 이벤트를 주고 싶지면 SSR이기에 줄 수 가없음
+            //   ㄴ> 그렇기에 해당 Movie 컴포넌트 내부에서 "use client"선언을 통해
+            //       해당 컴포넌트에 "Hydration" 적용하여 사용 할 수있다.
+            <Movie
+              key={movie.id}
+              id={movie.id}
+              poster_path={movie.poster_path}
+              title={movie.title}
+            />
+          ))}
         </div>
-      );
-    }
-    ```
+      </>
+    );
+  }
+  ```
+
+- UI 컴포넌트 (`CSR`)
+
+  ```javascript
+  "use client";
+
+  import Link from "next/link";
+  import styles from "../../styles/movie.module.css";
+  import { useRouter } from "next/navigation";
+  import Image from "next/image";
+
+  interface IMovieProps {
+    title: string;
+    id: string;
+    poster_path: string;
+  }
+
+  /**
+   * 👍 SSR(Main Page) -> CSR(현재 컴포넌트)를 불러서 사용
+   */
+  export default function Movie({ title, id, poster_path }: IMovieProps) {
+    //  👍 HOOK 사용
+    const router = useRouter();
+    return (
+      <div className={styles.movie}>
+        <Image
+          width={"300"}
+          height={"300"}
+          src={poster_path}
+          alt={title}
+          //  👍 Click Event 사용
+          onClick={() => {
+            router.push(`/movies/${id}`);
+          }}
+        />
+        <Link prefetch href={`/movies/${id}`}>
+          {title}
+        </Link>
+      </div>
+    );
+  }
+  ```
 
 ## Dynamic Metadata
+
 ```properties
 # ℹ️ Next 최신 버전에서는 자동으로 캐싱을 지원하기에 한번 사용했던 Data는 다시 요청하지 않고 캐시 데이터를 사용한다.
 ```
+
 - 주의사항
-  -  `export`형태의 함수여야한다.
-    - 따로 호출하는 부분이 없어도 괜찮다 Next Framework에서 자동으로 사용해줌
+  - `export`형태의 함수여야한다.
+  - 따로 호출하는 부분이 없어도 괜찮다 Next Framework에서 자동으로 사용해줌
   - 함수명은 무조건 `generateMetadata`형태여야 한다.
-    - 👉 Override 형태이므로  `export const metadata` 형태로 지정할 경우에는 이와 같이 사용해도 무관
+    - 👉 Override 형태이므로 `export const metadata` 형태로 지정할 경우에는 이와 같이 사용해도 무관
   - 메인 화면을 반환하는 컴포넌트의 `props`를 같이 공유 받는다.
     - `export async function generateMetadata({ params: { id } }: IParams)` 와 같이 `params`을 받아 사용 가능함
   - `await` 함수 데이터를 받아오므로 `async`를 붙여주자
 - 예시
+
   ```javascript
   interface IParams {
     params: { id: string };
   }
-  
+
   // ℹ️ { params: { id }를 공유받아 같이 사용이 가능하다
   export async function generateMetadata({ params: { id } }: IParams) {
     const movie = await getMovie(id);
@@ -665,46 +681,47 @@
       title: movie.title,
     };
   }
-  
+
   export default function MovieDetailPage({ params: { id } }: IParams) {
-    return (
-      <>
-        {/* Main ComponentCode.. */}
-      </>
-    );
+    return <>{/* Main ComponentCode.. */}</>;
   }
   ```
 
 ## Caching 이슈 및 해결 방법
+
 - SSR에서 문제
+
   - 새로운 데이터가 업데이트되는 실시간 정보를 다루는 웹에는 부적합하고, 동적 컨텐츠를 처리하는데 한계가 있다.
   - 방법이 전혀 없는 것은 아니다 `revalidate` 설정을 해주면 된다. (`IRS`)
   - 예시 1
+
     ```javascript
     export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
       let post = await fetch(`https://api.vercel.app/blog/${params.id}`).then(
         (res) => res.json()
-      )
-     
+      );
+
       return {
         props: { post },
         // Next.js will invalidate the cache when a
         // request comes in, at most once every 60 seconds.
         revalidate: 60,
-      }
-    }
+      };
+    };
     ```
+
   - 예시 2
+
     ```javascript
     import { NextPage } from "next";
     import React from "react";
-    
+
     interface Product {
       id: number;
       name: string;
       price: number;
     }
-    
+
     // Mock data fetching function
     const fetchProducts = async (): Promise<Product[]> => {
       console.log(new Date().toISOString());
@@ -715,10 +732,10 @@
         { id: 3, name: "Product C", price: 39.99 },
       ];
     };
-    
+
     const ProductsPage: NextPage = async () => {
       const products = await fetchProducts();
-    
+
       return (
         <div>
           <h1>Products</h1>
@@ -732,23 +749,24 @@
         </div>
       );
     };
-    
+
     export const revalidate = 1;
-    
+
     export default ProductsPage;
     ```
+
 - 예시 3
   ```javascript
-  const data = await fetch('https://api.example.com/data', {
-    next: { revalidate: 10 }  // 10초마다 새로운 데이터를 확인합니다.
-  }).then(res => res.json());
+  const data = await fetch("https://api.example.com/data", {
+    next: { revalidate: 10 }, // 10초마다 새로운 데이터를 확인합니다.
+  }).then((res) => res.json());
   ```
 - Fetch Cache 설정 변경
 
 ```javascript
-const data = await fetch('https://api.example.com/data', {
+const data = await fetch("https://api.example.com/data", {
   headers: {
-    'Cache-Control': 'no-cache'  // 항상 최신 데이터를 가져옵니다.
-  }
-}).then(res => res.json());
+    "Cache-Control": "no-cache", // 항상 최신 데이터를 가져옵니다.
+  },
+}).then((res) => res.json());
 ```
