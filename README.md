@@ -7,6 +7,12 @@
 #  - 기본적으로 필요한 Library가 설치 되어 있으며 필요한 경우 추가하는 식으로 진행하면 된다.
 ```
 
+## 구분
+
+- [Next13 사용 링크]("https://github.com/edel1212/nextJsStudy/tree/main/Next13")
+- [Next14 사용 링크]("https://github.com/edel1212/nextJsStudy/tree/main/Next14")
+- [Recoil 사용 링크]("https://github.com/edel1212/nextJsStudy/tree/main/next-recoil")
+
 ## `Library`와`Framework`의 차이
 
 - Library
@@ -97,31 +103,18 @@
 
   - 예시
 
-    - 모듈 방식
+    - ??.module.css
 
       ```css
-      /*
-      
-      💬 해당 MoudleCss의 최고의 장점은 사용하는 className의 중복을 걱정하지 않아도 된다는 것이다.
-          - 랜더링하여 화면에 사용될 경우 알아서 겹치지 않도록 자동으로 클래스명을 만들어서 사용됨!
-          - 단 사용 방법은 "clasName={모듈명.클래스명}"으로 사용해줘야 한다는 것이다.
-      */
-      .nav {
-        background-color: green;
-        display: flex;
-        justify-items: center;
-      }
-
       .active {
         color: red;
       }
-
       .link {
         text-decoration: none;
       }
       ```
 
-    - NavBar.js
+    - 적용 컴포넌트
 
       ```javascript
       import Link from "next/link";
@@ -194,100 +187,84 @@
 ## 정적 파일 불러오는 방법
 
 - NextJs에서 정적 파일은 public폴더 안에 존재한다.
-- 불러오는 방법은 간단하게 "/파일"로 다른 경로작업 필요없이 불러올 수 있다. - 틀이 그렇게 잡혀있기 때문
+  - 불러오는 방법은 간단하게 "/파일"로 다른 경로작업 필요없이 불러올 수 있다. - 틀이 그렇게 잡혀있기 때문
 - 예시 코드
-
-  - index.js
-
   ```javascript
   export default function NavBar() {
-    return (
-      <nav>
-        {/** 바로 public 내부의 vercel.svg를 불러옴 */}
-        <img src="/vercel.svg"></img>
-      </nav>
-    );
+    return <img src="/vercel.svg"></img>;
   }
   ```
 
 ## Image
 
 - NextJs에서는 Image 태그를 사용할 수 있다
-- 사용 시 장점
+- 장점
 
   - Lazy loading 가능
   - 사이즈 최적화
   - Layout shift 방지
     - 이미지가 로딩전에 너비, 높이가 없어 레이아웃이 깨지는 것
 
-- 사용 방법
+- 예시
 
-  - `img/index.js` - 일반 `<img>, <Image>` 사용
+  ```javascript
+  import Image from "next/image";
+  import React, { useEffect, useState } from "react";
+  // ⭐️ Image 태그에 넣을 이미지 Import
+  import picka from "/public/picka.png";
 
-    ```javascript
-    import Image from "next/image";
-    import React, { useEffect, useState } from "react";
-    // ⭐️ Image 태그에 넣을 이미지 Import
-    import picka from "/public/picka.png";
+  export default function page() {
+    return (
+      <div>
+        <Image
+          // ✅ src 경로는 import 된 경로만 사용이 가능함!!!
+          src={picka}
+          alt="이건 최적화 적용"
+          className="다 가능해"
+          style={{ width: "50%", height: "100%" }}
+        />
+      </div>
+    );
+  }
+  ```
 
-    export default function page() {
-      return (
-        <div>
-          {/* 👉 일반 img 태그 */}
-          <img src="/picka.png" width={"50%"} alt="이건 그냥 img" />
-
-          <hr />
-
-          {/* 👉 Image 태그 */}
-          <Image
-            // ✅ src 경로는 import 된 경로만 사용이 가능함!!!
-            src={picka}
-            alt="이건 최적화 적용"
-            className="다 가능해"
-            style={{ width: "50%", height: "100%" }}
-          />
-        </div>
-      );
-    }
-    ```
-
-  - `img/index.js` - 비동기 ` <Image>` 사용
+  - Fetching Data Image ` <Image>` 사용
 
     - ⭐️ 중요 포인트는 서버로 요청하는 도메인을 `next.config.js`에 꼭 등록해줘야 한다는 것이다.
 
-    ```javascript
-    import Image from "next/image";
-    import React, { useEffect, useState } from "react";
-    import picka from "/public/picka.png";
+  ```javascript
+  import Image from "next/image";
+  import React, { useEffect, useState } from "react";
+  import picka from "/public/picka.png";
 
-    export default function page() {
-      const [imageData, setImageData] = useState(null);
+  export default function page() {
+    const [imageData, setImageData] = useState(null);
 
-      useEffect(() => {
-        (async () => {
-          try {
-            const response = await fetch("/api/movies");
-            const data = await response.json();
-            setImageData(data.results[0].poster_path); // 데이터 설정
-          } catch (error) {
-            console.error("Error fetching image data:", error);
-          }
-        })();
-      }, []);
+    useEffect(() => {
+      (async () => {
+        try {
+          const response = await fetch("/api/movies");
+          const data = await response.json();
+          setImageData(data.results[0].poster_path); // 데이터 설정
+        } catch (error) {
+          console.error("Error fetching image data:", error);
+        }
+      })();
+    }, []);
 
-      return (
-        <div>
-          {/* 👉 비동기 통신 */}
-          <Image
-            src={`https://image.tmdb.org/t/p/w500/${imageData}`}
-            alt="비동기 통신으로 받음 next.config.js 설정 필요"
-            width={400} // ⭐️ 필수 값
-            height={300} // ⭐️ 필수 값
-          />
-        </div>
-      );
-    }
-    ```
+    return (
+      <div>
+        {/* 👉 비동기 통신 */}
+        <Image
+          src={`https://image.tmdb.org/t/p/w500/${imageData}`}
+          alt="비동기 통신으로 받음 next.config.js 설정 필요"
+          width={400} // ⭐️ 필수 값
+          height={300} // ⭐️ 필수 값
+        />
+      </div>
+    );
+  }
+  ```
 
   - `next.config.js`
 
@@ -433,7 +410,7 @@
         module.exports = nextConfig;
         ```
 
-## 환경변수 사용 방법
+## 환경 변수 사용 방법
 
 - 개발 시 `local`환경과 `prod`환경의 사용 URL이 다를 수 있다.
 - 해당 경우 일일이 변경해주는 것이 아닌 하나의 파일을 읽게끔 하면 된다 `.env`파일
@@ -470,102 +447,6 @@
   - 설치방법
     - `npx json-server --port 9999 --watch db.json`
       - db.json 파일을 감시중이라 변경하면 해당 값에 맞에 반환이 가능하다.
-
-## Recoil
-
-- 전역관리 상태 관리를 위한 Library 이다.
-- React 특성상 하위 하위.... 하위 컴포넌트에 데이터를 전달하기 위해서는 props를 전달해야하는데 그렇게되면 중간 컴포넌트들이 중계자가 되는 불편함이 있다.
-  - 이러한 불편함을 덜어주고자 전역적으로 관리할 데이터를 지정하는 개념이다.
-- 사용방법
-
-  - 1 . `npm install recoil`
-  - 2 . 메인 js 부분에 감시할 수 있도록 `<RecoilRoot></RecoilRoot>` 설정
-
-    - \_app.js
-
-      ```javascript
-      import "@/styles/globals.css";
-      import { RecoilRoot } from "recoil";
-
-      export default function App({ Component, pageProps }) {
-        return;
-        <RecoilRoot>
-          <Component {...pageProps} />
-        </RecoilRoot>;
-      }
-      ```
-
-  - 3 . 사용할 Recoil State 선언
-
-    - 위치는 상관없으나 기본적으로 store라는 폴더에 자주 사용함
-    - countState.js
-
-      ```javascript
-      // 👉 Recoil에 사용할 번수선언을 위한 Import
-      import { atom } from "recoil";
-
-      export const countState = atom({
-        // 👉 고유 식별 Key 지정 중복되면 안된다!
-        key: "count",
-        // 👉 사용 디폴트 값 지정 여러가지 형태 가능 {}, [] 등등
-        default: 10,
-      });
-      ```
-
-  - 4 . 사용 js
-
-    - index.js
-
-      ```javascript
-      import React, { useState } from "react";
-
-      // 👉 Recouil State Import
-      import { countState } from "../store/countState";
-      // 👉 Recoil 함수 Import
-      import { useRecoilValue, useRecoilState } from "recoil";
-
-      function Counter() {
-        // 👉 useRecoilState(상태변수)를 사용해서 불러옴 useState() 와 사용방법이 똑같음
-        const [count, setCount] = useRecoilState(countState);
-        return (
-          <div>
-            <h1>Counter : {count}</h1>
-            <button
-              onClick={() => {
-                setCount(count + 1);
-              }}
-            >
-              +
-            </button>
-          </div>
-        );
-      }
-      function DisplayCount() {
-        // 값만 읽어오는 Recoil 함수
-        const count = useRecoilValue(countState);
-        return (
-          <div>
-            <h1>받아온 값을 보여주기만하는 컴포넌트 {count} </h1>
-          </div>
-        );
-      }
-
-      export default function Home() {
-        return (
-          <div>
-            <Counter />
-            <hr></hr>
-            <DisplayCount></DisplayCount>
-          </div>
-        );
-      }
-      ```
-
-- Recoil 사용 가능 import 메서드
-  - useRecoilState : react의 useState랑 동일한 기능이라고 생각하면 된다.
-  - useSetRecoilState : useState에서 setter만 있는것
-  - useRecolValue : useState에서 value만 있는것
-  - useResetRecoilState : 기본값으로 초기화 시키는 기능
 
 ## React Cookie
 
