@@ -9,9 +9,9 @@
 
 ## 구분
 
-- [Next13 사용 링크]("https://github.com/edel1212/nextJsStudy/tree/main/Next13")
-- [Next14 사용 링크]("https://github.com/edel1212/nextJsStudy/tree/main/Next14")
-- [Recoil 사용 링크]("https://github.com/edel1212/nextJsStudy/tree/main/next-recoil")
+- [Next13 사용 링크](https://github.com/edel1212/nextJsStudy/tree/main/Next13)
+- [Next14 사용 링크](https://github.com/edel1212/nextJsStudy/tree/main/Next14)
+- [Recoil 사용 링크](https://github.com/edel1212/nextJsStudy/tree/main/next-recoil)
 
 ## `Library`와`Framework`의 차이
 
